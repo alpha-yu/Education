@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.education.edu.mapper.SchoolMapper">
+
+    <resultMap type="School" id="SchoolResult">
+    <id     property="schoolId"     column="school_id"    />
+    <result property="schoolName"   column="school_name"  />
+    <result property="schoolImg"    column="school_img"   />
+    <result property="schoolInfo"   column="school_info"  />
+    <result property="schoolCif"    column="school_cif"   />
+    <result property="schoolAddr"   column="school_addr"  />
+    <result property="schoolPc"     column="school_pc"    />
+    <result property="delFlag"      column="delFlag"      />
+    <result property="createBy"     column="create_by"    />
+    <result property="createTime"   column="create_time"  />
+    <result property="updateBy"     column="update_by"    />
+    <result property="updateTime"   column="update_time"  />
+    </resultMap>
+
+    <sql id="selectSchoolVo">
+        select school_id, school_name, school_img, school_info, school_cif, school_addr, school_pc, delFlag, create_by,
+               create_time, update_by, update_time
+        from edu_school
+    </sql>
+
+    <select id="selectSchoolList" parameterType="School" resultMap="SchoolResult">
+        <include refid="selectSchoolVo"/>
+        <where>
+            <if test="schoolName != null and schoolName != ''">
+                AND school_name like concat('%', #{schoolName}, '%')
+            </if>
+            <if test="delFlag != null and delFlag != ''">
+                AND delFlag = #{delFlag}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectSchoolById" parameterType="School" resultMap="SchoolResult">
+        <include refid="selectSchoolVo"/>
+        where school_id = #{schoolId}
+    </select>
+
+    <update id="updateSchool" parameterType="School">
+        update edu_school
+        <set>
+            <if test="schoolName != null and schoolName != ''">school_name = #{schoolName},</if>
+            <if test="schoolImg != null and schoolImg != ''">school_img = #{schoolImg},</if>
+            <if test="schoolInfo != null and schoolInfo != ''">school_info = #{schoolInfo},</if>
+            <if test="schoolCif != null and schoolCif != ''">school_cif = #{schoolCif},</if>
+            <if test="schoolAddr != null and schoolAddr != ''">school_addr = #{schoolAddr},</if>
+            <if test="schoolPc != null and schoolPc != ''">school_pc = #{schoolPc},</if>
+            <if test="delFlag != null and delFlag != ''">delFlag = #{delFlag},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where school_id = #{schoolId}
+    </update>
+
+    <insert id="insertSchool" parameterType="School" useGeneratedKeys="true" keyProperty="schoolId">
+        insert into edu_school(
+        <if test="schoolId != null and schoolId != 0">school_id,</if>
+        <if test="schoolName != null and schoolName != ''">school_name,</if>
+        <if test="schoolImg != null and schoolImg != ''">school_img,</if>
+        <if test="schoolInfo != null and schoolInfo != ''">school_info,</if>
+        <if test="schoolCif != null and schoolCif != ''">school_cif,</if>
+        <if test="schoolAddr != null and schoolAddr != ''">school_addr,</if>
+        <if test="schoolPc != null and schoolPc != ''">school_pc,</if>
+        <if test="delFlag != null and delFlag != ''">delFlag,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        create_time
+        )values(
+        <if test="schoolId != null and schoolId != 0">#{schoolId},</if>
+        <if test="schoolName != null and schoolName != ''">#{schoolName},</if>
+        <if test="schoolImg != null and schoolImg != ''">#{schoolImg},</if>
+        <if test="schoolInfo != null and schoolInfo != ''">#{schoolInfo},</if>
+        <if test="schoolCif != null and schoolCif != ''">#{schoolCif},</if>
+        <if test="schoolAddr != null and schoolAddr != ''">#{schoolAddr},</if>
+        <if test="schoolPc != null and schoolPc != ''">#{schoolPc},</if>
+        <if test="delFlag != null and delFlag != ''">#{delFlag},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        sysdate()
+        )
+    </insert>
+
+    <delete id="deleteSchoolByIds" parameterType="Long">
+        delete from edu_school where school_id in
+        <foreach collection="array" item="schoolId" open="(" separator="," close=")">
+            #{schoolId}
+        </foreach>
+    </delete>
+
+</mapper>

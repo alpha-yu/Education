@@ -180,6 +180,7 @@
         <module>education-quartz</module>
         <module>education-generator</module>
         <module>education-common</module>
+        <module>education-edu</module>
     </modules>
     <packaging>pom</packaging>
 

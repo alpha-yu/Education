@@ -60,6 +60,12 @@
             <groupId>com.education</groupId>
             <artifactId>education-generator</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.education</groupId>
+            <artifactId>education-edu</artifactId>
+            <version>3.8.6</version>
+            <scope>compile</scope>
+        </dependency>
 
     </dependencies>
 
