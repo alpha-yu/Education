@@ -42,3 +42,14 @@ export function delSchool(schoolId) {
     method: 'delete'
   })
 }
+
+// 处理带有上传文件的表单，insert和update在后端处理中区分
+export function uploadSchool(data) {
+  return request({
+    url: '/edu/school/upload',
+    method: 'post',
+    data: data,
+    contentType: 'multipart/form-data'
+  })
+}
+

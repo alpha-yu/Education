@@ -56,6 +56,11 @@ public class School extends BaseEntity {
     @Excel(name = "删除状态", readConverterExp = "0=正常,1=删除")
     private String delFlag;
 
+    /**
+     * 图片本地接口前缀
+     */
+    private String api;
+
     public Long getSchoolId() {
         return schoolId;
     }
@@ -119,15 +124,24 @@ public class School extends BaseEntity {
     public void setDelFlag(String delFlag) {
         this.delFlag = delFlag;
     }
+
+    public String getApi() {
+        return api;
+    }
+
+    public void setApi(String api) {
+        this.api = api;
+    }
+
     @Override
-    public String toString(){
+    public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
                 .append("schoolId", getSchoolId())
                 .append("schoolName", getSchoolName())
                 .append("schoolImg", getSchoolImg())
                 .append("schoolInfo", getSchoolInfo())
                 .append("schoolCif", getSchoolCif())
-                .append("schoolAddr",  getSchoolAddr())
+                .append("schoolAddr", getSchoolAddr())
                 .append("schoolPc", getSchoolPc())
                 .append("delFlag ", getDelFlag())
                 .append("createBy", getCreateBy())

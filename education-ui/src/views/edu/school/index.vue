@@ -87,10 +87,17 @@
 
     <el-table v-loading="loading" :data="schoolList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="45" align="center"/>
-      <el-table-column label="LOGO" align="center" prop="schoolImg" :show-overflow-tooltip="true" width="100"/>
+      <el-table-column label="LOGO" align="center" prop="schoolImg" width="100">
+        <template slot-scope="scope">
+          <div style="height: 80px;width: 80px;display: grid;justify-items: center;align-items: center">
+            <img v-if="scope.row.schoolImg" :src="scope.row.schoolImg" style="max-height: 80px;max-width: 80px;"
+                 alt=""/>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column label="名称" align="center" prop="schoolName" :show-overflow-tooltip="true" width="200"/>
-      <el-table-column label="简介" align="center" prop="schoolInfo" :show-overflow-tooltip="true" width="220"/>
-      <el-table-column label="联系方式" align="center" prop="schoolCif" :show-overflow-tooltip="true" width="130"/>
+      <el-table-column label="简介" align="center" prop="schoolInfo" :show-overflow-tooltip="true" width="200"/>
+      <el-table-column label="联系方式" align="center" prop="schoolCif" :show-overflow-tooltip="true" width="150"/>
       <el-table-column label="地址" align="center" prop="schoolAddr" :show-overflow-tooltip="true" width="200"/>
       <el-table-column label="邮编" align="center" prop="schoolPc" :show-overflow-tooltip="true" width="100"/>
       <el-table-column label="状态" align="center" prop="delFlag" width="80">
@@ -143,7 +150,14 @@
           <el-input v-model="form.schoolName" placeholder="请输入学校名称"/>
         </el-form-item>
         <el-form-item label="LOGO" prop="schoolImg">
-          <el-input v-model="form.schoolImg" placeholder=""/>
+          <el-upload ref="upload" action="#" :http-request="httpRequest" :show-file-list="false"
+                     :before-upload="beforeUpload">
+            <el-button size="small" icon="el-icon-upload">选择</el-button>
+          </el-upload>
+        </el-form-item>
+        <el-form-item label="预览">
+          <el-image v-if="form.schoolImg" :src="form.schoolImg" style="width: 150px;object-fit: contain"
+                    :preview-src-list="[form.schoolImg]"/>
         </el-form-item>
         <el-form-item label="学校简介" prop="schoolInfo">
           <el-input v-model="form.schoolInfo" placeholder="请输入学校简介" type="textarea" rows="2"/>
@@ -174,11 +188,39 @@
       </div>
     </el-dialog>
 
+    <!-- 详情对话框 -->
+    <el-dialog :title="title" :visible.sync="infoOpen" width="500px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="学校名称">
+          <el-input v-model="form.schoolName" readonly/>
+        </el-form-item>
+        <el-form-item label="LOGO">
+          <el-image v-if="form.schoolImg" :src="form.schoolImg" style="width: 150px;object-fit: contain"
+                    :preview-src-list="[form.schoolImg]"/>
+        </el-form-item>
+        <el-form-item label="学校简介">
+          <el-input v-model="form.schoolInfo" type="textarea" rows="2" readonly/>
+        </el-form-item>
+        <el-form-item label="联系方式">
+          <el-input v-model="form.schoolCif" readonly/>
+        </el-form-item>
+        <el-form-item label="学校地址">
+          <el-input v-model="form.schoolAddr" readonly/>
+        </el-form-item>
+        <el-form-item label="学校邮编">
+          <el-input v-model="form.schoolPc" readonly/>
+        </el-form-item>
+        <el-form-item label="状态">
+          <dict-tag :options="dict.type.sys_normal_disable" :value="form.delFlag"/>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
-import {listSchool, getSchool, updateSchool, addSchool, delSchool} from "@/edu_api/school";
+import {listSchool, getSchool, updateSchool, addSchool, delSchool, uploadSchool} from "@/edu_api/school";
 
 export default {
   name: "School",
@@ -201,8 +243,10 @@ export default {
       schoolList: [],
       // 弹出层标题
       title: "",
-      // 是否显示弹出层
+      // 是否显示修改弹出层
       open: false,
+      // 是否显示详情弹出层
+      infoOpen: false,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -225,6 +269,9 @@ export default {
       rules: {
         schoolName: [
           {required: true, message: "学校名称不能为空", trigger: "blur"}
+        ],
+        schoolImg: [
+          {required: true, message: "未上传学校LOGO", trigger: "blur"}
         ],
         schoolCif: [
           {required: true, message: "联系方式不能为空", trigger: "blur"}
@@ -301,32 +348,66 @@ export default {
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const schoolId = row.schoolId || this.ids
+      const schoolId = row.schoolId
       getSchool(schoolId).then(response => {
         this.form = response.data;
         this.open = true;
         this.title = "修改学校信息";
       });
     },
+    /** 详细按钮操作 */
+    handleInfo(row) {
+      this.reset();
+      const schoolId = row.schoolId
+      getSchool(schoolId).then(response => {
+        this.form = response.data;
+        this.infoOpen = true;
+        this.title = "学校信息详情";
+      });
+    },
     /** 提交按钮 */
     submitForm: function () {
+      let formData = new FormData();
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.schoolId != undefined) {
-            updateSchool(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功");
-              this.open = false;
-              this.getList();
-            });
+          if (this.form.file != null) {
+            formData.append("file", this.form.file);
+            this.form.api = process.env.VUE_APP_BASE_API;
+            this.form.schoolImg = "";
           } else {
-            addSchool(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功");
-              this.open = false;
-              this.getList();
-            });
+            formData.append("file", new Blob());
           }
+
+          Object.keys(this.form).forEach(key => {
+            if (this.form[key] instanceof Array) {
+              // 如果是数组就循环加入表单，key保持相同即可，这就是表单的数组
+              this.form[key].forEach(item => {
+                if (item == null) {
+                  formData.append(key, '');
+                } else {
+                  formData.append(key, item);
+                }
+              })
+            } else {
+              // 如果不是数组就直接追加进去
+              if (this.form[key] == null) {
+                formData.append(key, '');
+              } else {
+                formData.append(key, this.form[key]);
+              }
+            }
+          })
+
+          // 文件上传
+          this.$modal.msgWarning("正在上传");
+          uploadSchool(formData).then(response => {
+            this.$modal.msgSuccess("上传成功");
+            this.open = false;
+            this.getList();
+          });
         }
       });
+
     },
     /** 删除按钮操作 */
     handleDelete(row) {
@@ -344,6 +425,54 @@ export default {
       this.download('edu/school/export', {
         ...this.queryParams
       }, `school_${new Date().getTime()}.xlsx`)
+    },
+
+    // 打开文件选择器
+    openFile: function () {
+      document.getElementById('photoFind').click()
+    },
+    // 上传前检查
+    beforeUpload(file) {
+      const type = ['image/jpg', 'image/png', 'image/jpeg']
+      const isImg = type.includes(file.type);
+      if (!isImg) {
+        this.$message.error("请上传jpg/png/jpeg格式图片");
+        return;
+      }
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      this.form.schoolImg = null;
+      reader.onload = () => {
+        this.form.schoolImg = reader.result;
+      };
+      this.$modal.msgWarning("正在处理");
+      return isImg;
+    },
+    // 文件数量超出处理
+    handleExceed(files, fileList) {
+      this.$message.warning(
+        `当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${
+          files.length + fileList.length
+        } 个文件`
+      );
+    },
+    // 文件上传成功处理
+    handleUploadSuccess(files) {
+      if (files.code === 200) {
+        const {data} = files;
+        this.form.schoolImg = data.url;
+        this.isDisabled = true
+      }
+    },
+    //上传文件处理
+    handleChange(file, fileList) {
+      if (fileList.length > 0) {
+        this.fileList = [fileList[fileList.length - 1]]// 这一步，是 展示最后一次选择的文件
+      }
+    },
+    // 自定义的提交函数，取出文件设置进请求参数
+    httpRequest(param) {
+      this.form.file = param.file
     }
   }
 };
