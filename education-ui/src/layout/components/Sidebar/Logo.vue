@@ -35,7 +35,7 @@ export default {
   },
   data() {
     return {
-      title: process.env.VUE_APP_TITLE,
+      title: '乡村教育资源服务共享',
       logo: logoImg
     }
   }

@@ -284,7 +284,7 @@ export default {
           {
             pattern: /^[0-9]{6}$/,
             message: "邮编格式有误",
-            trigger: "blur"
+            trigger: ["blur", "change"]
           }
         ]
       }

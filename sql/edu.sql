@@ -1,4 +1,4 @@
-drop table if exists edu_ad;
+drop table if exists edu_advertisement;
 
 drop table if exists edu_goods;
 
@@ -11,9 +11,9 @@ drop table if exists edu_school;
 drop table if exists edu_wish;
 
 /*==============================================================*/
-/* Table: edu_ad                                                */
+/* Table: edu_advertisement                                     */
 /*==============================================================*/
-create table edu_ad
+create table edu_advertisement
 (
     ad_id                bigint not null auto_increment,
     ad_info              varchar(200),
