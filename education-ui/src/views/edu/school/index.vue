@@ -144,43 +144,59 @@
     />
 
     <!-- 添加或修改对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="学校名称" prop="schoolName">
-          <el-input v-model="form.schoolName" placeholder="请输入学校名称"/>
-        </el-form-item>
-        <el-form-item label="LOGO" prop="schoolImg">
-          <el-upload ref="upload" action="#" :http-request="httpRequest" :show-file-list="false"
-                     :before-upload="beforeUpload">
-            <el-button size="small" icon="el-icon-upload">选择</el-button>
-          </el-upload>
-        </el-form-item>
-        <el-form-item label="预览">
-          <el-image v-if="form.schoolImg" :src="form.schoolImg" style="width: 150px;object-fit: contain"
-                    :preview-src-list="[form.schoolImg]"/>
-        </el-form-item>
-        <el-form-item label="学校简介" prop="schoolInfo">
-          <el-input v-model="form.schoolInfo" placeholder="请输入学校简介" type="textarea" rows="2"/>
-        </el-form-item>
-        <el-form-item label="联系方式" prop="schoolCif">
-          <el-input v-model="form.schoolCif" placeholder="请输入联系方式"/>
-        </el-form-item>
-        <el-form-item label="学校地址" prop="schoolAddr">
-          <el-input v-model="form.schoolAddr" placeholder="请输入学校地址"/>
-        </el-form-item>
-        <el-form-item label="学校邮编" prop="schoolPc">
-          <el-input v-model="form.schoolPc" placeholder="请输入学校邮编"/>
-        </el-form-item>
-        <el-form-item label="状态" prop="delFlag">
-          <el-radio-group v-model="form.delFlag">
-            <el-radio
-              v-for="dict in dict.type.sys_normal_disable"
-              :key="dict.value"
-              :label="dict.value"
-            >{{ dict.label }}
-            </el-radio>
-          </el-radio-group>
-        </el-form-item>
+        <el-col :span="24">
+          <el-form-item label="学校名称" prop="schoolName">
+            <el-input v-model="form.schoolName" placeholder="请输入学校名称"/>
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="LOGO" prop="schoolImg">
+            <el-upload ref="upload" action="#" :http-request="httpRequest" :show-file-list="false"
+                       :before-upload="beforeUpload">
+              <el-button size="small" icon="el-icon-upload">选择</el-button>
+            </el-upload>
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="预览">
+            <el-image v-if="form.schoolImg" :src="form.schoolImg" style="width: 150px;object-fit: contain"
+                      :preview-src-list="[form.schoolImg]"/>
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="学校简介" prop="schoolInfo">
+            <el-input v-model="form.schoolInfo" placeholder="请输入学校简介" type="textarea" rows="2"/>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="联系方式" prop="schoolCif">
+            <el-input v-model="form.schoolCif" placeholder="请输入联系方式"/>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="学校邮编" prop="schoolPc">
+            <el-input v-model="form.schoolPc" placeholder="请输入学校邮编"/>
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="学校地址" prop="schoolAddr">
+            <el-input v-model="form.schoolAddr" placeholder="请输入学校地址"/>
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="状态" prop="delFlag">
+            <el-radio-group v-model="form.delFlag">
+              <el-radio
+                v-for="dict in dict.type.sys_normal_disable"
+                :key="dict.value"
+                :label="dict.value"
+              >{{ dict.label }}
+              </el-radio>
+            </el-radio-group>
+          </el-form-item>
+        </el-col>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -189,7 +205,7 @@
     </el-dialog>
 
     <!-- 详情对话框 -->
-    <el-dialog :title="title" :visible.sync="infoOpen" width="500px" append-to-body>
+    <el-dialog :title="title" :visible.sync="infoOpen" width="800px" append-to-body>
       <el-form ref="form" :model="form" label-width="80px">
         <el-form-item label="学校名称">
           <el-input v-model="form.schoolName" readonly/>
@@ -201,14 +217,18 @@
         <el-form-item label="学校简介">
           <el-input v-model="form.schoolInfo" type="textarea" rows="2" readonly/>
         </el-form-item>
-        <el-form-item label="联系方式">
-          <el-input v-model="form.schoolCif" readonly/>
-        </el-form-item>
+        <el-col :span="12">
+          <el-form-item label="联系方式">
+            <el-input v-model="form.schoolCif" readonly/>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="学校邮编">
+            <el-input v-model="form.schoolPc" readonly/>
+          </el-form-item>
+        </el-col>
         <el-form-item label="学校地址">
           <el-input v-model="form.schoolAddr" readonly/>
-        </el-form-item>
-        <el-form-item label="学校邮编">
-          <el-input v-model="form.schoolPc" readonly/>
         </el-form-item>
         <el-form-item label="状态">
           <dict-tag :options="dict.type.sys_normal_disable" :value="form.delFlag"/>
@@ -482,6 +502,7 @@ export default {
 .el-textarea__inner {
   font-family: 微软雅黑, Arial, Helvetica, sans-serif !important;
 }
+
 .el-input__inner {
   font-family: 微软雅黑, Arial, Helvetica, sans-serif !important;
 }
