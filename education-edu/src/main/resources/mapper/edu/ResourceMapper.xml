@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.education.edu.mapper.ResourceMapper">
+
+    <resultMap type="Resource" id="ResourceResult">
+        <id     property="resourceId"       column="resource_id"      />
+        <result property="resourceName"     column="resource_name"    />
+        <result property="resourceImg"      column="resource_img"     />
+        <result property="resourceInfo"     column="resource_info"    />
+        <result property="resourceUrl"      column="resource_url"     />
+        <result property="resourceType"     column="resource_type"    />
+        <result property="resourceGrade"    column="resource_grade"   />
+        <result property="resourceObject"   column="resource_object"  />
+        <result property="resourceVer"      column="resource_ver"     />
+        <result property="norFlag"          column="norFlag"          />
+        <result property="createBy"         column="create_by"        />
+        <result property="createTime"       column="create_time"      />
+        <result property="updateBy"         column="update_by"        />
+        <result property="updateTime"       column="update_time"      />
+    </resultMap>
+
+    <sql id="selectResourceVo">
+        select resource_id, resource_name, resource_img, resource_info, resource_url, resource_type, resource_grade,
+               resource_object, resource_ver, norFlag, create_by, create_time, update_by, update_time
+        from edu_resource
+    </sql>
+
+    <select id="selectResourceList" parameterType="Resource" resultMap="ResourceResult">
+        <include refid="selectResourceVo"/>
+        <where>
+            <if test="resourceName != null and resourceName != ''">
+                AND resource_name like concat('%', #{resourceName}, '%')
+            </if>
+            <if test="resourceType != null and resourceType != ''">
+                AND resource_type = #{resourceType}
+            </if>
+            <if test="resourceGrade != null and resourceGrade != ''">
+                AND resource_grade = #{resourceGrade}
+            </if>
+            <if test="resourceObject != null and resourceObject != ''">
+                AND resource_object = #{resourceObject}
+            </if>
+            <if test="resourceVer != null and resourceVer != ''">
+                AND resource_ver = #{resourceVer}
+            </if>
+            <if test="norFlag != null and norFlag != ''">
+                AND norFlag = #{norFlag}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectResourceById" parameterType="Resource" resultMap="ResourceResult">
+        <include refid="selectResourceVo"/>
+        where resource_id = #{resourceId}
+    </select>
+    
+    <update id="updateResource" parameterType="Resource">
+        update edu_resource
+        <set>
+            <if test="resourceName != null and resourceName != ''">resource_name = #{resourceName},</if>
+            <if test="resourceImg != null and resourceImg != ''">resource_img = #{resourceImg},</if>
+            <if test="resourceInfo != null and resourceInfo != ''">resource_info = #{resourceInfo},</if>
+            <if test="resourceUrl != null and resourceUrl != ''">resource_url = #{resourceUrl},</if>
+            <if test="resourceType != null and resourceType != ''">resource_type = #{resourceType},</if>
+            <if test="resourceGrade != null and resourceGrade != ''">resource_grade = #{resourceGrade},</if>
+            <if test="resourceObject != null and resourceObject != ''">resource_object = #{resourceObject},</if>
+            <if test="resourceVer != null and resourceVer != ''">resource_ver = #{resourceVer},</if>
+            <if test="norFlag != null and norFlag != ''">norFlag = #{norFlag},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where resource_id = #{resourceId}
+    </update>
+
+    <insert id="insertResource" parameterType="Resource" useGeneratedKeys="true" keyProperty="resourceId">
+        insert into edu_resource(
+        <if test="resourceId != null and resourceId != 0">resource_id,</if>
+        <if test="resourceName != null and resourceName != ''">resource_name,</if>
+        <if test="resourceImg != null and resourceImg != ''">resource_img,</if>
+        <if test="resourceInfo != null and resourceInfo != ''">resource_info,</if>
+        <if test="resourceUrl != null and resourceUrl != ''">resource_url,</if>
+        <if test="resourceType != null and resourceType != ''">resource_type,</if>
+        <if test="resourceGrade != null and resourceGrade != ''">resource_grade,</if>
+        <if test="resourceObject != null and resourceObject != ''">resource_object,</if>
+        <if test="resourceVer != null and resourceVer != ''">resource_ver,</if>
+        <if test="norFlag != null and norFlag != ''">norFlag,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        create_time
+        )values(
+        <if test="resourceId != null and resourceId != 0">#{resourceId},</if>
+        <if test="resourceName != null and resourceName != ''">#{resourceName},</if>
+        <if test="resourceImg != null and resourceImg != ''">#{resourceImg},</if>
+        <if test="resourceInfo != null and resourceInfo != ''">#{resourceInfo},</if>
+        <if test="resourceUrl != null and resourceUrl != ''">#{resourceUrl},</if>
+        <if test="resourceType != null and resourceType != ''">#{resourceType},</if>
+        <if test="resourceGrade != null and resourceGrade != ''">#{resourceGrade},</if>
+        <if test="resourceObject != null and resourceObject != ''">#{resourceObject},</if>
+        <if test="resourceVer != null and resourceVer != ''">#{resourceVer},</if>
+        <if test="norFlag != null and norFlag != ''">#{norFlag},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        sysdate()
+        )
+    </insert>
+
+    <delete id="deleteResourceByIds" parameterType="Long">
+        delete from edu_resource where resource_id in
+        <foreach collection="array" item="resourceId" open="(" separator="," close=")">
+            #{resourceId}
+        </foreach>
+    </delete>
+
+</mapper>

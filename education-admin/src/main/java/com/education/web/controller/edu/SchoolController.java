@@ -91,7 +91,7 @@ public class SchoolController extends BaseController {
     public void export(HttpServletResponse response, School s) {
         List<School> list = schoolService.selectSchoolList(s);
         ExcelUtil<School> util = new ExcelUtil<School>(School.class);
-        util.exportExcel(response, list, "岗位数据");
+        util.exportExcel(response, list, "学校信息");
     }
 
     /**

@@ -1,8 +1,5 @@
 package com.education.edu.service.impl;
 
-import com.education.common.constant.UserConstants;
-import com.education.common.exception.ServiceException;
-import com.education.common.utils.StringUtils;
 import com.education.edu.domain.School;
 import com.education.edu.mapper.SchoolMapper;
 import com.education.edu.service.ISchoolService;

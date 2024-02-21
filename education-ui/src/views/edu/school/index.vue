@@ -19,7 +19,7 @@
           style="width: 180px"
         />
       </el-form-item>
-      <el-form-item label="状态" prop="delFlag">
+      <el-form-item label="学校状态" prop="delFlag">
         <el-select v-model="queryParams.delFlag" placeholder="状态" clearable style="width: 180px">
           <el-option
             v-for="dict in dict.type.sys_normal_disable"
@@ -190,7 +190,7 @@
 
     <!-- 详情对话框 -->
     <el-dialog :title="title" :visible.sync="infoOpen" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="form" :model="form" label-width="80px">
         <el-form-item label="学校名称">
           <el-input v-model="form.schoolName" readonly/>
         </el-form-item>
@@ -348,7 +348,7 @@ export default {
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const schoolId = row.schoolId
+      const schoolId = row.schoolId || this.ids
       getSchool(schoolId).then(response => {
         this.form = response.data;
         this.open = true;
@@ -477,3 +477,12 @@ export default {
   }
 };
 </script>
+
+<style>
+.el-textarea__inner {
+  font-family: 微软雅黑, Arial, Helvetica, sans-serif !important;
+}
+.el-input__inner {
+  font-family: 微软雅黑, Arial, Helvetica, sans-serif !important;
+}
+</style>

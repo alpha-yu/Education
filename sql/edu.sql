@@ -70,6 +70,7 @@ create table edu_resource
     resource_name        varchar(200),
     resource_img         varchar(200),
     resource_info        varchar(200),
+    resource_url         varchar(200),
     resource_type        varchar(200),
     resource_grade       varchar(200),
     resource_object      varchar(200),

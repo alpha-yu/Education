@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 查询部门列表
+// 查询学校列表
 export function listSchool(query) {
   return request({
     url: '/edu/school/list',
