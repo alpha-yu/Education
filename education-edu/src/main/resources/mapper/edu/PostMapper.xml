@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.education.edu.mapper.PostMapper">
+
+    <resultMap type="Post" id="PostResult">
+        <id     property="postId"     column="post_id"    />
+        <id property="schoolId"   column="school_id"  />
+        <result property="postInfo"    column="post_info"   />
+        <result property="comFlag"   column="comFlag"  />
+        <result property="createBy"     column="create_by"    />
+        <result property="createTime"   column="create_time"  />
+        <result property="updateBy"     column="update_by"    />
+        <result property="updateTime"   column="update_time"  />
+    </resultMap>
+
+    <sql id="selectPostVo">
+        select post_id, school_id, post_info, comFlag, create_by, create_time, update_by, update_time
+        from edu_post
+    </sql>
+
+    <select id="selectPostList" parameterType="Post" resultMap="PostResult">
+        <include refid="selectPostVo"/>
+        <where>
+            <if test="schoolId != null and schoolId != ''">
+                AND school_Id = #{schoolId}
+            </if>
+            <if test="comFlag != null and comFlag != ''">
+                AND comFlag = #{comFlag}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectPostById" parameterType="Post" resultMap="PostResult">
+        <include refid="selectPostVo"/>
+        where post_id = #{postId}
+    </select>
+
+    <update id="updatePost" parameterType="Post">
+        update edu_post
+        <set>
+            <if test="schoolId != null and schoolId != ''">school_id = #{schoolId},</if>
+            <if test="postInfo != null and postInfo != ''">post_info = #{postInfo},</if>
+            <if test="comFlag != null and comFlag != ''">comFlag = #{comFlag},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where post_id = #{postId}
+    </update>
+
+    <insert id="insertPost" parameterType="Post" useGeneratedKeys="true" keyProperty="postId">
+        insert into edu_post(
+        <if test="postId != null and postId != 0">post_id,</if>
+        <if test="schoolId != null and schoolId != ''">school_id,</if>
+        <if test="postInfo != null and postInfo != ''">post_info,</if>
+        <if test="comFlag != null and comFlag != ''">comFlag,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        create_time
+        )values(
+        <if test="postId != null and postId != 0">#{postId},</if>
+        <if test="schoolId != null and schoolId != ''">#{schoolId},</if>
+        <if test="PostInfo != null and postInfo != ''">#{postInfo},</if>
+        <if test="comFlag != null and comFlag != ''">#{comFlag},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        sysdate()
+        )
+    </insert>
+
+    <delete id="deletePostByIds" parameterType="Long">
+        delete from edu_post where edu_post.post_id in
+        <foreach collection="array" item="postId" open="(" separator="," close=")">
+            #{postId}
+        </foreach>
+    </delete>
+
+
+
+</mapper>

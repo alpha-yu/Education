@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.education.edu.mapper.WishMapper">
+
+
+    <resultMap type="Wish" id="WishResult">
+        <id     property="wishId"     column="wish_id"    />
+        <result property="wishName"   column="wish_name"  />
+        <result property="wishInfo"   column="wish_info"  />
+        <result property="wishImg"    column="wish_img"   />
+        <result property="wisherSchool"    column="wisher_school"   />
+        <result property="wisherName"   column="wisher_name"  />
+        <result property="claimantName"     column="claimant_name"    />
+        <result property="claimFlag"      column="claimFlag"      />
+        <result property="createBy"     column="create_by"    />
+        <result property="createTime"   column="create_time"  />
+        <result property="updateBy"     column="update_by"    />
+        <result property="updateTime"   column="update_time"  />
+    </resultMap>
+
+    <sql id="selectWishVo">
+        select wish_id, wish_name, wish_info, wish_img, wisher_school, wisher_name, claimant_name, claimFlag, create_by,
+               create_time, update_by, update_time
+        from edu_wish
+    </sql>
+
+    <select id="selectWishList" parameterType="Wish" resultMap="WishResult">
+        <include refid="selectWishVo"/>
+        <where>
+            <if test="wishName != null and wishName != ''">
+                AND wish_name like concat('%', #{wishName}, '%')
+            </if>
+            <if test="claimFlag != null and claimFlag != ''">
+                AND claimFlag = #{cliamFlag}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectWishById" parameterType="Wish" resultMap="WishResult">
+        <include refid="selectWishVo"/>
+        where wish_id = #{wishId}
+    </select>
+
+    <update id="updateWish" parameterType="Wish">
+        update edu_wish
+        <set>
+            <if test="wishName != null and wishName != ''">wish_name = #{wishName},</if>
+            <if test="wishInfo != null and wishInfo != ''">wish_Info = #{wishInfo},</if>
+            <if test="wishImg != null and wishImg != ''">wish_Img = #{wishImg},</if>
+            <if test="wisherSchool != null and wisherSchool != ''">wisher_school = #{wisherSchool},</if>
+            <if test="wisherName != null and wisherName != ''">wisher_name = #{wisherName},</if>
+            <if test="claimantName != null and claimantName != ''">claimant_name = #{claimantName},</if>
+            <if test="claimFlag != null and claimFlag != ''">claimFlag = #{claimFlag},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where wish_id = #{wishId}
+    </update>
+
+    <insert id="insertWish" parameterType="Wish" useGeneratedKeys="true" keyProperty="wishId">
+    insert into edu_wish(
+        <if test="wishId != null and wishId != 0">wish_id,</if>
+        <if test="wishName != null and wishName != ''">wish_name,</if>
+        <if test="wishInfo != null and wishInfo != ''">wish_Info,</if>
+        <if test="wishImg != null and wishImg != ''">wish_Img,</if>
+        <if test="wisherSchool != null and wisherSchool != ''">wisher_school,</if>
+        <if test="wisherName != null and wisherName != ''">wisher_name,</if>
+        <if test="claimantName != null and claimantName != ''">claimant_name,</if>
+        <if test="claimFlag != null and claimFlag != ''">claimFlag,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        create_time
+    ) values (
+        <if test="wishId != null and wishId != 0">#{wishId},</if>
+        <if test="wishName != null and wishName != ''">#{wishName},</if>
+        <if test="wishInfo != null and wishInfo != ''">#{wishInfo},</if>
+        <if test="wishImg != null and wishImg != ''">#{wishImg},</if>
+        <if test="wisherSchool != null and wisherSchool != ''">#{wisherSchool},</if>
+        <if test="wisherName != null and wisherName != ''">#{wisherName},</if>
+        <if test="claimantName != null and claimantName != ''">#{claimantName},</if>
+        <if test="claimFlag != null and claimFlag != ''">#{claimFlag},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        sysdate()
+                 )
+    </insert>
+
+    <delete id="deleteWishByIds" parameterType="Long">
+        delete from edu_wish where edu_wish.wish_id in
+        <foreach collection="array" item="wishId" open="(" separator="," close=")">
+            #{wishId}
+        </foreach>
+    </delete>
+
+</mapper>
