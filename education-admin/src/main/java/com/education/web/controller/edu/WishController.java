@@ -7,10 +7,14 @@ import com.education.common.core.controller.BaseController;
 import com.education.common.core.domain.AjaxResult;
 import com.education.common.core.page.TableDataInfo;
 import com.education.common.enums.BusinessType;
+import com.education.common.utils.StringUtils;
 import com.education.common.utils.file.FileUploadUtils;
 import com.education.common.utils.file.MimeTypeUtils;
 import com.education.common.utils.poi.ExcelUtil;
+import com.education.edu.domain.School;
 import com.education.edu.domain.Wish;
+import com.education.edu.mapper.SchoolMapper;
+import com.education.edu.service.ISchoolService;
 import com.education.edu.service.IWishService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +34,9 @@ public class WishController extends BaseController{
     @Autowired
     private IWishService wishService;
 
+    @Autowired
+    private ISchoolService schoolService;
+
     /**
      * 获取心愿列表
      */
@@ -45,9 +52,15 @@ public class WishController extends BaseController{
      * 根据心愿编号获取详细信息
      */
     @PreAuthorize("@ss.hasPermi('edu:wish:query')")
-    @GetMapping(value = "/{wishId}")
-    public AjaxResult getInfo(@PathVariable Long wishId) {
-        return success(wishService.selectWishById(wishId));
+    @GetMapping(value = {"/", "/{wishId}"})
+    public AjaxResult getInfo(@PathVariable(value = "wishId", required = false) Long wishId) {
+        AjaxResult ajax = AjaxResult.success();
+        ajax.put("schools",schoolService.selectSchoolAll());
+        if(StringUtils.isNotNull(wishId)){
+            Wish wish = wishService.selectWishById(wishId);
+            ajax.put(AjaxResult.DATA_TAG, wish);
+        }
+        return ajax;
     }
 
     /**

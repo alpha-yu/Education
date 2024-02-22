@@ -5,14 +5,14 @@
 <mapper namespace="com.education.edu.mapper.PostMapper">
 
     <resultMap type="Post" id="PostResult">
-        <id     property="postId"     column="post_id"    />
-        <id property="schoolId"   column="school_id"  />
-        <result property="postInfo"    column="post_info"   />
-        <result property="comFlag"   column="comFlag"  />
-        <result property="createBy"     column="create_by"    />
-        <result property="createTime"   column="create_time"  />
-        <result property="updateBy"     column="update_by"    />
-        <result property="updateTime"   column="update_time"  />
+        <id     property="postId"       column="post_id"       />
+        <id     property="schoolId"     column="school_id"     />
+        <result property="postInfo"     column="post_info"     />
+        <result property="comFlag"      column="comFlag"       />
+        <result property="createBy"     column="create_by"     />
+        <result property="createTime"   column="create_time"   />
+        <result property="updateBy"     column="update_by"     />
+        <result property="updateTime"   column="update_time"   />
     </resultMap>
 
     <sql id="selectPostVo">

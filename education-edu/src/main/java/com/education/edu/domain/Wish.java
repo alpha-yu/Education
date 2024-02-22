@@ -36,8 +36,13 @@ public class Wish extends BaseEntity{
     /**
      * 心愿发起学校ID
      */
-    @Excel(name = "心愿发起学校ID", cellType = Excel.ColumnType.NUMERIC)
-    private Long wisherSchool;
+    private Long wisherSchoolId;
+
+    /**
+     * 心愿发起学校名称
+     */
+    @Excel(name = "心愿发起学校名称", cellType = Excel.ColumnType.NUMERIC)
+    private String wisherSchoolName;
 
     /**
      * 心愿发起人名称
@@ -70,12 +75,12 @@ public class Wish extends BaseEntity{
         this.wishId = wishId;
     }
 
-    public Long getWisherSchool() {
-        return wisherSchool;
+    public String getWishName() {
+        return wishName;
     }
 
-    public void setWisherId(Long wisherSchool) {
-        this.wisherSchool = wisherSchool;
+    public void setWishName(String wishName) {
+        this.wishName = wishName;
     }
 
     public String getWishInfo() {
@@ -86,22 +91,36 @@ public class Wish extends BaseEntity{
         this.wishInfo = wishInfo;
     }
 
-
-    public String getWishName() {
-        return wishName;
-    }
-
-    public void setWishName(String wishName) {
-        this.wishName = wishName;
-    }
-
-
     public String getWishImg() {
         return wishImg;
     }
 
     public void setWishImg(String wishImg) {
         this.wishImg = wishImg;
+    }
+
+    public Long getWisherSchoolId() {
+        return wisherSchoolId;
+    }
+
+    public void setWisherSchoolId(Long wisherSchoolId) {
+        this.wisherSchoolId = wisherSchoolId;
+    }
+
+    public String getWisherSchoolName() {
+        return wisherSchoolName;
+    }
+
+    public void setWisherSchoolName(String wisherSchoolName) {
+        this.wisherSchoolName = wisherSchoolName;
+    }
+
+    public String getWisherName() {
+        return wisherName;
+    }
+
+    public void setWisherName(String wisherName) {
+        this.wisherName = wisherName;
     }
 
     public String getClaimantName() {
@@ -128,14 +147,6 @@ public class Wish extends BaseEntity{
         this.api = api;
     }
 
-    public String getWisherName() {
-        return wisherName;
-    }
-
-    public void setWisherName(String wisherName) {
-        this.wisherName = wisherName;
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -143,7 +154,8 @@ public class Wish extends BaseEntity{
                 .append("wishName", getWishName())
                 .append("wishInfo", getWishInfo())
                 .append("wishImg", getWishImg())
-                .append("wisherSchool", getWisherSchool())
+                .append("wisherSchoolId", getWisherSchoolId())
+                .append("wisherSchoolName", getWisherSchoolName())
                 .append("wisherName", getWisherName())
                 .append("claimantName", getClaimantName())
                 .append("claimFlag", getClaimFlag())

@@ -4,26 +4,27 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.education.edu.mapper.WishMapper">
 
-
     <resultMap type="Wish" id="WishResult">
-        <id     property="wishId"     column="wish_id"    />
-        <result property="wishName"   column="wish_name"  />
-        <result property="wishInfo"   column="wish_info"  />
-        <result property="wishImg"    column="wish_img"   />
-        <result property="wisherSchool"    column="wisher_school"   />
-        <result property="wisherName"   column="wisher_name"  />
-        <result property="claimantName"     column="claimant_name"    />
-        <result property="claimFlag"      column="claimFlag"      />
-        <result property="createBy"     column="create_by"    />
-        <result property="createTime"   column="create_time"  />
-        <result property="updateBy"     column="update_by"    />
-        <result property="updateTime"   column="update_time"  />
+        <id     property="wishId"             column="wish_id"            />
+        <result property="wishName"           column="wish_name"          />
+        <result property="wishInfo"           column="wish_info"          />
+        <result property="wishImg"            column="wish_img"           />
+        <result property="wisherSchoolId"     column="wisher_school_id"   />
+        <result property="wisherSchoolName"   column="school_name"        />
+        <result property="wisherName"         column="wisher_name"        />
+        <result property="claimantName"       column="claimant_name"      />
+        <result property="claimFlag"          column="claimFlag"          />
+        <result property="createBy"           column="create_by"          />
+        <result property="createTime"         column="create_time"        />
+        <result property="updateBy"           column="update_by"          />
+        <result property="updateTime"         column="update_time"        />
     </resultMap>
 
     <sql id="selectWishVo">
-        select wish_id, wish_name, wish_info, wish_img, wisher_school, wisher_name, claimant_name, claimFlag, create_by,
-               create_time, update_by, update_time
-        from edu_wish
+        select w.wish_id, w.wish_name, w.wish_info, w.wish_img, w.wisher_school_id, w.wisher_name, w.claimant_name,
+               s.school_name, w.claimFlag, w.create_by, w.create_time, w.update_by, w.update_time
+        from edu_wish w
+            left join edu_school s on w.wisher_school_id = s.school_id
     </sql>
 
     <select id="selectWishList" parameterType="Wish" resultMap="WishResult">
@@ -32,8 +33,14 @@
             <if test="wishName != null and wishName != ''">
                 AND wish_name like concat('%', #{wishName}, '%')
             </if>
+            <if test="wisherSchoolName != null and wisherSchoolName != ''">
+                AND school_name like concat('%', #{wisherSchoolName}, '%')
+            </if>
+            <if test="claimantName != null and claimantName != ''">
+                AND claimant_name like concat('%', #{claimantName}, '%')
+            </if>
             <if test="claimFlag != null and claimFlag != ''">
-                AND claimFlag = #{cliamFlag}
+                AND claimFlag = #{claimFlag}
             </if>
         </where>
     </select>
@@ -49,7 +56,7 @@
             <if test="wishName != null and wishName != ''">wish_name = #{wishName},</if>
             <if test="wishInfo != null and wishInfo != ''">wish_Info = #{wishInfo},</if>
             <if test="wishImg != null and wishImg != ''">wish_Img = #{wishImg},</if>
-            <if test="wisherSchool != null and wisherSchool != ''">wisher_school = #{wisherSchool},</if>
+            <if test="wisherSchoolId != null and wisherSchoolId != ''">wisher_school_id = #{wisherSchoolId},</if>
             <if test="wisherName != null and wisherName != ''">wisher_name = #{wisherName},</if>
             <if test="claimantName != null and claimantName != ''">claimant_name = #{claimantName},</if>
             <if test="claimFlag != null and claimFlag != ''">claimFlag = #{claimFlag},</if>
@@ -65,7 +72,7 @@
         <if test="wishName != null and wishName != ''">wish_name,</if>
         <if test="wishInfo != null and wishInfo != ''">wish_Info,</if>
         <if test="wishImg != null and wishImg != ''">wish_Img,</if>
-        <if test="wisherSchool != null and wisherSchool != ''">wisher_school,</if>
+        <if test="wisherSchoolId != null and wisherSchoolId != ''">wisher_school_id,</if>
         <if test="wisherName != null and wisherName != ''">wisher_name,</if>
         <if test="claimantName != null and claimantName != ''">claimant_name,</if>
         <if test="claimFlag != null and claimFlag != ''">claimFlag,</if>
@@ -76,7 +83,7 @@
         <if test="wishName != null and wishName != ''">#{wishName},</if>
         <if test="wishInfo != null and wishInfo != ''">#{wishInfo},</if>
         <if test="wishImg != null and wishImg != ''">#{wishImg},</if>
-        <if test="wisherSchool != null and wisherSchool != ''">#{wisherSchool},</if>
+        <if test="wisherSchoolId != null and wisherSchoolId != ''">#{wisherSchoolId},</if>
         <if test="wisherName != null and wisherName != ''">#{wisherName},</if>
         <if test="claimantName != null and claimantName != ''">#{claimantName},</if>
         <if test="claimFlag != null and claimFlag != ''">#{claimFlag},</if>

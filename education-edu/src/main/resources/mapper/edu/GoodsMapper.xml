@@ -5,17 +5,17 @@
 <mapper namespace="com.education.edu.mapper.GoodsMapper">
 
     <resultMap type="Goods" id="GoodsResult">
-        <id property="goodsId" column="goods_id"/>
-        <result property="schoolId" column="school_id"/>
-        <result property="goodsName" column="goods_name"/>
-        <result property="goodsImg" column="goods_img"/>
-        <result property="goodsInfo" column="goods_info"/>
-        <result property="buyerName" column="buyer_name"/>
-        <result property="soldFlag" column="soldFlag"/>
-        <result property="createBy" column="create_by"/>
-        <result property="createTime" column="create_time"/>
-        <result property="updateBy" column="update_by"/>
-        <result property="updateTime" column="update_time"/>
+        <id     property="goodsId"      column="goods_id"      />
+        <result property="schoolId"     column="school_id"     />
+        <result property="goodsName"    column="goods_name"    />
+        <result property="goodsImg"     column="goods_img"     />
+        <result property="goodsInfo"    column="goods_info"    />
+        <result property="buyerName"    column="buyer_name"    />
+        <result property="soldFlag"     column="soldFlag"      />
+        <result property="createBy"     column="create_by"     />
+        <result property="createTime"   column="create_time"   />
+        <result property="updateBy"     column="update_by"     />
+        <result property="updateTime"   column="update_time"   />
     </resultMap>
 
     <sql id="selectGoodsVo">

@@ -5,14 +5,14 @@
 <mapper namespace="com.education.edu.mapper.AdvertisementMapper">
 
     <resultMap type="Advertisement" id="AdvertisementResult">
-        <id property="adId" column="ad_id"/>
-        <result property="advertisementInfo" column="ad_info"/>
-        <result property="adImg" column="ad_img"/>
-        <result property="useFlag" column="useFlag"/>
-        <result property="createBy" column="create_by"/>
-        <result property="createTime" column="create_time"/>
-        <result property="updateBy" column="update_by"/>
-        <result property="updateTime" column="update_time"/>
+        <id     property="adId"                column="ad_id"         />
+        <result property="advertisementInfo"   column="ad_info"       />
+        <result property="adImg"               column="ad_img"        />
+        <result property="useFlag"             column="useFlag"       />
+        <result property="createBy"            column="create_by"     />
+        <result property="createTime"          column="create_time"   />
+        <result property="updateBy"            column="update_by"     />
+        <result property="updateTime"          column="update_time"   />
     </resultMap>
 
     <sql id="selectAdvertisementVo">
