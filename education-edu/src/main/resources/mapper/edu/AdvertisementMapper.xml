@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.education.edu.mapper.AdvertisementMapper">
+
+    <resultMap type="Advertisement" id="AdvertisementResult">
+        <id property="adId" column="ad_id"/>
+        <result property="advertisementInfo" column="ad_info"/>
+        <result property="adImg" column="ad_img"/>
+        <result property="useFlag" column="useFlag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectAdvertisementVo">
+        select ad_id, ad_info, ad_img, useFlag, create_by, create_time, update_by, update_time
+        from edu_ad
+    </sql>
+
+    <select id="selectAdvertisementList" parameterType="Advertisement" resultMap="AdvertisementResult">
+        <include refid="selectAdvertisementVo"/>
+        <where>
+            <if test="useFlag != null and useFlag != ''">
+                AND useflag = #{useFlag}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectAdvertisementById" parameterType="Long" resultMap="AdvertisementResult">
+        <include refid="selectAdvertisementVo"/>
+        where ad_id = #{adId}
+    </select>
+
+    <update id="updateAdvertisement" parameterType="Advertisement">
+        update edu_ad
+        <set>
+            <if test="advertisementInfo != null and advertisementInfo != ''">ad_info = #{advertisementInfo},</if>
+            <if test="adImg != null and adImg != ''">ad_img = #{adImg},</if>
+            <if test="useFlag != null and useFlag != ''">useFlag = #{useFlag},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where ad_id = #{adId}
+    </update>
+
+    <insert id="insertAdvertisement" parameterType="Advertisement" useGeneratedKeys="true" keyProperty="adId">
+        insert into edu_ad(
+        <if test="adId != null and adId != 0">ad_id,</if>
+        <if test="advertisementInfo != null and advertisementInfo != ''">ad_info,</if>
+        <if test="adImg != null and adImg != ''">ad_img,</if>
+        <if test="useFlag != null and useFlag != ''">useFlag,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        create_time
+        )values(
+        <if test="adId != null and adId != 0">#{adId},</if>
+        <if test="advertisementInfo != null and advertisementInfo != ''">#{advertisementInfo},</if>
+        <if test="adImg != null and adImg != ''">#{adImg},</if>
+        <if test="useFlag != null and useFlag != ''">#{useFlag},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        sysdate()
+        )
+    </insert>
+
+    <delete id="deleteAdvertisementByIds" parameterType="Long">
+        delete from edu_ad where ad_id in
+        <foreach collection="array" item="adId" open="(" separator="," close=")">
+            #{adId}
+        </foreach>
+    </delete>
+
+</mapper>

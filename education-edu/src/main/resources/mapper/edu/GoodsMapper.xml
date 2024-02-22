@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.education.edu.mapper.GoodsMapper">
+
+    <resultMap type="Goods" id="GoodsResult">
+        <id property="goodsId" column="goods_id"/>
+        <result property="schoolId" column="school_id"/>
+        <result property="goodsName" column="goods_name"/>
+        <result property="goodsImg" column="goods_img"/>
+        <result property="goodsInfo" column="goods_info"/>
+        <result property="buyerName" column="buyer_name"/>
+        <result property="soldFlag" column="soldFlag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectGoodsVo">
+        SELECT goods_id, school_id, goods_name, goods_img, goods_info, buyer_name, soldFlag, create_by,
+               create_time, update_by, update_time
+        FROM edu_goods
+    </sql>
+
+    <select id="selectGoodsList" parameterType="Goods" resultMap="GoodsResult">
+        <include refid="selectGoodsVo"/>
+        <where>
+            <if test="goodsName != null and goodsName != ''">
+                AND goods_name LIKE CONCAT('%', #{goodsName}, '%')
+            </if>
+            <if test="soldFlag != null and soldFlag != ''">
+                AND soldFlag = #{soldFlag}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectGoodsById" parameterType="Goods" resultMap="GoodsResult">
+        <include refid="selectGoodsVo"/>
+        WHERE goods_id = #{goodsId}
+    </select>
+
+    <update id="updateGoods" parameterType="Goods">
+        UPDATE edu_goods
+        <set>
+            <if test="schoolId != null and schoolId != 0">school_id = #{schoolId},</if>
+            --             <if test="goodsName != null and goodsName != ''">goods_name = #{goodsName},</if>
+            <if test="goodsImg != null and goodsImg != ''">goods_img = #{goodsImg},</if>
+            <if test="goodsInfo != null and goodsInfo != ''">goods_info = #{goodsInfo},</if>
+            <if test="goodsPrice != null and goodsPrice != ''">goods_price = #{goodsPrice},</if>
+            <if test="buyerName != null and buyerName != ''">buyer_name = #{buyerName},</if>
+            <if test="soldFlag != null and delFlag != ''">soldFlag = #{soldFlag},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = SYSDATE()
+        </set>
+        WHERE goods_id = #{goodsId}
+    </update>
+
+    <insert id="insertGoods" parameterType="Goods" useGeneratedKeys="true" keyProperty="goodsId">
+        INSERT INTO edu_goods(
+        <if test="goodsId != null and goodsId != 0">goods_id,</if>
+        <if test="schoolId != null and schoolId != 0">school_id,</if>
+        --         <if test="goodsName != null and goodsName != ''">goods_name,</if>
+        <if test="goodsImg != null and goodsImg != ''">goods_img,</if>
+        <if test="goodsInfo != null and goodsInfo != ''">goods_info,</if>
+        <if test="goodsPrice != null and goodsPrice != ''">goods_price,</if>
+        <if test="buyerName != null and buyerName != ''">buyer_name,</if>
+        <if test="soldFlag != null and soldFlag != ''">soldFlag,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        create_time
+        ) VALUES (
+        <if test="goodsId != null and goodsId != 0">#{goodsId},</if>
+        <if test="schoolId != null and schoolId != 0">#{schoolId},</if>
+        --         <if test="goodsName != null and goodsName != ''">#{goodsName},</if>
+        <if test="goodsImg != null and goodsImg != ''">#{goodsImg},</if>
+        <if test="goodsInfo != null and goodsInfo != ''">#{goodsInfo},</if>
+        <if test="goodsPrice != null and goodsPrice != ''">#{goodsPrice},</if>
+        <if test="buyerName != null and buyerName != ''">#{buyerName},</if>
+        <if test="soldFlag != null and soldFlag != ''">#{soldFlag},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        SYSDATE()
+        )
+    </insert>
+
+    <delete id="deleteGoodsByIds" parameterType="Long">
+        DELETE FROM edu_goods WHERE goods_id IN
+        <foreach collection="array" item="goodsId" open="(" separator="," close=")">
+            #{goodsId}
+        </foreach>
+    </delete>
+
+</mapper>
