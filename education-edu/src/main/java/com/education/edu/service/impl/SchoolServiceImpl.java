@@ -71,4 +71,13 @@ public class SchoolServiceImpl implements ISchoolService
     {
         return schoolMapper.deleteSchoolByIds(schoolIds);
     }
+
+    /**
+     * 查询学校岗位
+     *
+     * @return 学校列表
+     */
+    public List<School> selectSchoolAll(){
+        return schoolMapper.selectSchoolAll();
+    }
 }

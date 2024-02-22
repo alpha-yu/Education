@@ -45,4 +45,11 @@ public interface ISchoolService {
      * @return 结果
      */
     public int deleteSchoolByIds(Long[] schoolIds);
+
+    /**
+     * 查询学校岗位
+     *
+     * @return 学校列表
+     */
+    public List<School> selectSchoolAll();
 }

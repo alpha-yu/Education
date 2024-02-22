@@ -95,10 +95,10 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="名称" align="center" prop="schoolName" :show-overflow-tooltip="true" width="200"/>
+      <el-table-column label="名称" align="center" prop="schoolName" :show-overflow-tooltip="true" width="150"/>
       <el-table-column label="简介" align="center" prop="schoolInfo" :show-overflow-tooltip="true" width="200"/>
       <el-table-column label="联系方式" align="center" prop="schoolCif" :show-overflow-tooltip="true" width="150"/>
-      <el-table-column label="地址" align="center" prop="schoolAddr" :show-overflow-tooltip="true" width="200"/>
+      <el-table-column label="地址" align="center" prop="schoolAddr" :show-overflow-tooltip="true" width="250"/>
       <el-table-column label="邮编" align="center" prop="schoolPc" :show-overflow-tooltip="true" width="100"/>
       <el-table-column label="状态" align="center" prop="delFlag" width="80">
         <template slot-scope="scope">
@@ -112,7 +112,7 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:school:edit']"
+            v-hasPermi="['edu:school:edit']"
           >修改
           </el-button>
           <el-button
@@ -120,7 +120,7 @@
             type="text"
             icon="el-icon-info"
             @click="handleInfo(scope.row)"
-            v-hasPermi="['system:school:query']"
+            v-hasPermi="['edu:school:query']"
           >详情
           </el-button>
           <el-button
@@ -128,7 +128,7 @@
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['system:school:remove']"
+            v-hasPermi="['edu:school:remove']"
           >删除
           </el-button>
         </template>

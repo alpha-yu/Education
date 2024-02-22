@@ -34,7 +34,7 @@
       <el-form-item label="资源状态" prop="norFlag">
         <el-select v-model="queryParams.norFlag" placeholder="资源状态" clearable style="width: 180px">
           <el-option
-            v-for="dict in dict.type.sys_normal_disable"
+            v-for="dict in dict.type.edu_resource_statu"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
@@ -136,7 +136,7 @@
       <el-table-column label="版本" align="center" prop="resourceVer" :show-overflow-tooltip="true" width="200"/>
       <el-table-column label="状态" align="center" prop="norFlag" width="80">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.sys_normal_disable" :value="scope.row.norFlag"/>
+          <dict-tag :options="dict.type.edu_resource_statu" :value="scope.row.norFlag"/>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -146,7 +146,7 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:resource:edit']"
+            v-hasPermi="['edu:resource:edit']"
           >修改
           </el-button>
           <el-button
@@ -154,7 +154,7 @@
             type="text"
             icon="el-icon-info"
             @click="handleInfo(scope.row)"
-            v-hasPermi="['system:resource:query']"
+            v-hasPermi="['edu:resource:query']"
           >详情
           </el-button>
           <el-button
@@ -162,7 +162,7 @@
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['system:resource:remove']"
+            v-hasPermi="['edu:resource:remove']"
           >删除
           </el-button>
         </template>
@@ -254,7 +254,7 @@
           <el-form-item label="状态" prop="norFlag">
             <el-radio-group v-model="form.norFlag">
               <el-radio
-                v-for="dict in dict.type.sys_normal_disable"
+                v-for="dict in dict.type.edu_resource_statu"
                 :key="dict.value"
                 :label="dict.value"
               >{{ dict.label }}
@@ -304,7 +304,7 @@
           <el-input v-model="form.resourceInfo" type="textarea" rows="2" readonly/>
         </el-form-item>
         <el-form-item label="状态">
-          <dict-tag :options="dict.type.sys_normal_disable" :value="form.norFlag"/>
+          <dict-tag :options="dict.type.edu_resource_statu" :value="form.norFlag"/>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -318,11 +318,11 @@ import {listResource, getResource, delResource, uploadResource} from "@/edu_api/
 
 export default {
   name: "Resource",
-  dicts: ['sys_normal_disable', 'edu_resource_type', 'edu_resource_grade', 'edu_resource_object'],
+  dicts: ['edu_resource_statu', 'edu_resource_type', 'edu_resource_grade', 'edu_resource_object'],
   data() {
     return {
       // 遮罩层
-      loading: false,
+      loading: true,
       // 选中数组
       ids: [],
       // 非单个禁用

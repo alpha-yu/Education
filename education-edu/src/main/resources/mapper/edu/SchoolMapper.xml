@@ -42,6 +42,10 @@
         where school_id = #{schoolId}
     </select>
 
+    <select id="selectSchoolAll" resultMap="SchoolResult">
+        <include refid="selectSchoolVo"/>
+    </select>
+
     <update id="updateSchool" parameterType="School">
         update edu_school
         <set>
