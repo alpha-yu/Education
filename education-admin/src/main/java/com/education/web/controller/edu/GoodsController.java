@@ -12,6 +12,7 @@ import com.education.common.utils.file.MimeTypeUtils;
 import com.education.common.utils.poi.ExcelUtil;
 import com.education.edu.domain.Goods;
 import com.education.edu.service.IGoodsService;
+import com.education.edu.service.ISchoolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -27,6 +28,8 @@ public class GoodsController extends BaseController {
 
     @Autowired
     private IGoodsService goodsService;
+    @Autowired
+    private ISchoolService schoolService;
 
     /**
      * 获取商品列表
@@ -43,9 +46,15 @@ public class GoodsController extends BaseController {
      * 根据商品编号获取详细信息
      */
     @PreAuthorize("@ss.hasPermi('edu:goods:query')")
-    @GetMapping(value = "/{goodsId}")
-    public AjaxResult getInfo(@PathVariable Long goodsId) {
-        return success(goodsService.selectGoodsById(goodsId));
+    @GetMapping(value = {"/","/{goodsId}"})
+    public AjaxResult getInfo(@PathVariable(value = "goodsId", required = false) Long goodsId) {
+        AjaxResult ajax =  AjaxResult.success();
+        ajax.put("schools",schoolService.selectSchoolAll());
+        if(StringUtils.isNotNull(goodsId)){
+            Goods goods = goodsService.selectGoodsById(goodsId);
+            ajax.put(AjaxResult.DATA_TAG,goods);
+        }
+        return ajax;
     }
 
     /**

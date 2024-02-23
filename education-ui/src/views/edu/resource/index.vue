@@ -277,7 +277,9 @@
         </el-form-item>
         <el-form-item label="展示图片">
           <el-image v-if="form.resourceImg" :src="form.resourceImg" style="width: 150px;object-fit: contain"
-                    :preview-src-list="[form.resourceImg]"/>
+                    :preview-src-list="[form.resourceImg]">
+            <div slot="error" class="image-slot"/>
+          </el-image>
         </el-form-item>
         <el-col :span="8">
           <el-form-item label="资源类型">
@@ -325,6 +327,7 @@ export default {
       loading: true,
       // 选中数组
       ids: [],
+      names: [],
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -333,7 +336,7 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 学校数据
+      // 资源数据
       resourceList: [],
       // 弹出层标题
       title: "",
@@ -438,6 +441,7 @@ export default {
     /** 多选框选中数据 */
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.resourceId)
+      this.names = selection.map(item => item.resourceName)
       this.single = selection.length != 1
       this.multiple = !selection.length
     },
@@ -514,7 +518,8 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const resourceIds = row.resourceId || this.ids;
-      this.$modal.confirm('是否确认删除学校编号为"' + resourceIds + '"的数据项？').then(function () {
+      const resourceNames = row.resourceName || this.names;
+      this.$modal.confirm('是否确认删除资源名称为"' + resourceNames + '"的数据项？').then(function () {
         return delResource(resourceIds);
       }).then(() => {
         this.getList();
@@ -584,6 +589,7 @@ export default {
 .el-textarea__inner {
   font-family: 微软雅黑, Arial, Helvetica, sans-serif !important;
 }
+
 .el-input__inner {
   font-family: 微软雅黑, Arial, Helvetica, sans-serif !important;
 }

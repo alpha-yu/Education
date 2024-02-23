@@ -106,7 +106,8 @@
       </el-table-column>
       <el-table-column label="名称" align="center" prop="wishName" :show-overflow-tooltip="true" width="150"/>
       <el-table-column label="简介" align="center" prop="wishInfo" :show-overflow-tooltip="true" width="200"/>
-      <el-table-column label="发起学校" align="center" prop="wisherSchoolName" :show-overflow-tooltip="true" width="150"/>
+      <el-table-column label="发起学校" align="center" prop="wisherSchoolName" :show-overflow-tooltip="true"
+                       width="150"/>
       <el-table-column label="发起人" align="center" prop="wisherName" :show-overflow-tooltip="true" width="150"/>
       <el-table-column label="认领者" align="center" prop="claimantName" :show-overflow-tooltip="true" width="150"/>
       <el-table-column label="认领状态" align="center" prop="claimFlag" width="80">
@@ -121,7 +122,7 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['edu:wish:edit',]"
+            v-hasPermi="['edu:wish:edit']"
           >修改
           </el-button>
           <el-button
@@ -152,97 +153,115 @@
       @pagination="getList"
     />
 
-        <!-- 添加或修改对话框 -->
-        <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
-          <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-            <el-col :span="24">
-              <el-form-item label="心愿名称" prop="wishName">
-                <el-input v-model="form.wishName" placeholder="请输入心愿名称"/>
-              </el-form-item>
-            </el-col>
-            <el-col :span="24">
-              <el-form-item label="图片" prop="wishImg">
-                <el-upload ref="upload" action="#" :http-request="httpRequest" :show-file-list="false"
-                           :before-upload="beforeUpload">
-                  <el-button size="small" icon="el-icon-upload">选择</el-button>
-                </el-upload>
-              </el-form-item>
-            </el-col>
-            <el-col :span="24">
-              <el-form-item label="预览">
-                <el-image v-if="form.wishImg" :src="form.wishImg" style="width: 150px;object-fit: contain"
-                          :preview-src-list="[form.wishImg]"/>
-              </el-form-item>
-            </el-col>
-            <el-col :span="24">
-              <el-form-item label="心愿简介" prop="wishInfo">
-                <el-input v-model="form.wishInfo" placeholder="请输入心愿简介" type="textarea" rows="2"/>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="发起学校" prop="wisherSchoolId">
-                <el-select v-model="form.wisherSchoolId" placeholder="请选择学校" filterable style="width: 300px">
-                  <el-option
-                    v-for="item in schoolOptions"
-                    :key="item.schoolId"
-                    :label="item.schoolName"
-                    :value="item.schoolId"
-                  ></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="发起人" prop="wisherName">
-                <el-input v-model="form.wisherName" placeholder="请输入发起人"/>
-              </el-form-item>
-            </el-col>
-            <el-col :span="24">
-              <el-form-item label="认领状态" prop="claimFlag">
-                <el-radio-group v-model="form.claimFlag">
-                  <el-radio
-                    v-for="dict in dict.type.edu_wish_statu"
-                    :key="dict.value"
-                    :label="dict.value"
-                  >{{ dict.label }}
-                  </el-radio>
-                </el-radio-group>
-              </el-form-item>
-            </el-col>
-          </el-form>
-          <div slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="submitForm">确 定</el-button>
-            <el-button @click="cancel">取 消</el-button>
-          </div>
-        </el-dialog>
+    <!-- 添加或修改对话框 -->
+    <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-col :span="24">
+          <el-form-item label="心愿名称" prop="wishName">
+            <el-input v-model="form.wishName" placeholder="请输入心愿名称"/>
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="图片" prop="wishImg">
+            <el-upload ref="upload" action="#" :http-request="httpRequest" :show-file-list="false"
+                       :before-upload="beforeUpload">
+              <el-button size="small" icon="el-icon-upload">选择</el-button>
+            </el-upload>
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="预览">
+            <el-image v-if="form.wishImg" :src="form.wishImg" style="width: 150px;object-fit: contain"
+                      :preview-src-list="[form.wishImg]">
+              <div slot="error" class="image-slot"/>
+            </el-image>
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="心愿简介" prop="wishInfo">
+            <el-input v-model="form.wishInfo" placeholder="请输入心愿简介" type="textarea" rows="2"/>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="发起学校" prop="wisherSchoolId">
+            <el-select v-model="form.wisherSchoolId" placeholder="请选择学校" filterable style="width: 300px">
+              <el-option
+                v-for="item in schoolOptions"
+                :key="item.schoolId"
+                :label="item.schoolName"
+                :value="item.schoolId"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="发起人" prop="wisherName">
+            <el-input v-model="form.wisherName" placeholder="请输入发起人"/>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="认领状态" prop="claimFlag">
+            <el-radio-group v-model="form.claimFlag" @change="handleClaimFlagChange">
+              <el-radio
+                v-for="dict in dict.type.edu_wish_statu"
+                :key="dict.value"
+                :label="dict.value"
+              >{{ dict.label }}
+              </el-radio>
+            </el-radio-group>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="认领人" prop="claimantName">
+            <el-input v-model="form.claimantName" placeholder="请输入认领人" @change="handleClaimantNameInput"/>
+          </el-form-item>
+        </el-col>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
 
-        <!-- 详情对话框 -->
-        <el-dialog :title="title" :visible.sync="infoOpen" width="800px" append-to-body>
-          <el-form ref="form" :model="form" label-width="80px">
-            <el-form-item label="心愿名称">
-              <el-input v-model="form.wishName" placeholder="请输入心愿名称" readonly/>
+    <!-- 详情对话框 -->
+    <el-dialog :title="title" :visible.sync="infoOpen" width="800px" append-to-body>
+      <el-form ref="form" :model="form" label-width="80px">
+        <el-form-item label="心愿名称">
+          <el-input v-model="form.wishName" placeholder="请输入心愿名称" readonly/>
+        </el-form-item>
+        <el-form-item label="图片">
+          <el-image v-if="form.wishImg" :src="form.wishImg" style="width: 150px;object-fit: contain"
+                    :preview-src-list="[form.wishImg]"/>
+        </el-form-item>
+        <el-form-item label="心愿简介">
+          <el-input v-model="form.wishInfo" type="textarea" rows="2" readonly/>
+        </el-form-item>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="发起学校">
+              <el-input v-model="form.wisherSchoolName" readonly/>
             </el-form-item>
-            <el-form-item label="图片">
-              <el-image v-if="form.wishImg" :src="form.wishImg" style="width: 150px;object-fit: contain"
-                        :preview-src-list="[form.wishImg]"/>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="发起人">
+              <el-input v-model="form.wisherName" readonly/>
             </el-form-item>
-            <el-form-item label="心愿简介">
-              <el-input v-model="form.wishInfo" type="textarea" rows="2" readonly/>
-            </el-form-item>
-            <el-col :span="12">
-              <el-form-item label="发起学校">
-                <el-input v-model="form.wisherSchoolName" readonly/>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="发起人">
-                <el-input v-model="form.wisherName" readonly/>
-              </el-form-item>
-            </el-col>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
             <el-form-item label="认领状态">
               <dict-tag :options="dict.type.edu_wish_statu" :value="form.claimFlag"/>
             </el-form-item>
-          </el-form>
-        </el-dialog>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="认领人">
+              <el-input v-model="form.claimantName" readonly/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+    </el-dialog>
 
   </div>
 </template>
@@ -259,6 +278,7 @@ export default {
       loading: true,
       // 选中数组
       ids: [],
+      names: [],
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -341,7 +361,7 @@ export default {
         wisherSchoolId: undefined,
         wisherSchoolName: undefined,
         wisherName: undefined,
-        claimantName: undefined,
+        buyerName: undefined,
         claimFlag: '0'
       };
       this.resetForm("form");
@@ -358,7 +378,8 @@ export default {
     },
     /** 多选框选中数据 */
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.schoolId)
+      this.ids = selection.map(item => item.wishId)
+      this.names = selection.map(item => item.wishName)
       this.single = selection.length != 1
       this.multiple = !selection.length
     },
@@ -439,7 +460,8 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const wishIds = row.wishId || this.ids;
-      this.$modal.confirm('是否确认删除心愿编号为"' + wishIds + '"的数据项？').then(function () {
+      const wishNames = row.wishName || this.names;
+      this.$modal.confirm('是否确认删除心愿名称为"' + wishNames + '"的数据项？').then(function () {
         return delWish(wishIds);
       }).then(() => {
         this.getList();
@@ -500,7 +522,19 @@ export default {
     // 自定义的提交函数，取出文件设置进请求参数
     httpRequest(param) {
       this.form.file = param.file
-    }
+    },
+    // 处理认领人输入
+    handleClaimantNameInput() {
+      if (this.form.claimantName != "") {
+        this.form.claimFlag = "1"
+      }
+    },
+    // 处理认领状态切换
+    handleClaimFlagChange() {
+      if (this.form.claimFlag != "1") {
+        this.form.claimantName = undefined
+      }
+    },
   }
 };
 </script>

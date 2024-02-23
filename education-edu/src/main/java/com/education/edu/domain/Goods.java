@@ -21,10 +21,16 @@ public class Goods extends BaseEntity {
     private Long SchoolId;
 
     /**
+     * 商品来源学校名称
+     */
+    @Excel(name = "商品来源学校名称")
+    private String schoolName;
+
+    /**
      * 商品名称
      */
-//    @Excel(name = "商品名称")
-//    private String goodsName;
+    @Excel(name = "商品名称")
+    private String goodsName;
 
     /**
      * 商品图片地址
@@ -77,13 +83,21 @@ public class Goods extends BaseEntity {
         this.SchoolId = schoolId;
     }
 
-//    public String getGoodsName() {
-//        return goodsName;
-//    }
-//
-//    public void setGoodsName(String goodsName) {
-//        this.goodsName = goodsName;
-//    }
+    public String getSchoolName() {
+        return schoolName;
+    }
+
+    public void setSchoolName(String schoolName) {
+        this.schoolName = schoolName;
+    }
+
+    public String getGoodsName() {
+        return goodsName;
+    }
+
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
+    }
 
     public String getGoodsImg() {
         return goodsImg;
@@ -146,7 +160,8 @@ public class Goods extends BaseEntity {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
                 .append("goodsId", getGoodsId())
                 .append("SchoolId", getSchoolId())
-//                .append("goodsName", getGoodsName())
+                .append("SchoolName", getSchoolName())
+                .append("goodsName", getGoodsName())
                 .append("goodsImg", getGoodsImg())
                 .append("goodsInfo", getGoodsInfo())
                 .append("goodsPrice", getGoodsPrice())

@@ -6,10 +6,12 @@
 
     <resultMap type="Goods" id="GoodsResult">
         <id     property="goodsId"      column="goods_id"      />
-        <result property="schoolId"     column="school_id"     />
         <result property="goodsName"    column="goods_name"    />
+        <result property="schoolId"     column="school_id"     />
+        <result property="schoolName"   column="school_name"   />
         <result property="goodsImg"     column="goods_img"     />
         <result property="goodsInfo"    column="goods_info"    />
+        <result property="goodsPrice"   column="goods_price"   />
         <result property="buyerName"    column="buyer_name"    />
         <result property="soldFlag"     column="soldFlag"      />
         <result property="createBy"     column="create_by"     />
@@ -19,9 +21,11 @@
     </resultMap>
 
     <sql id="selectGoodsVo">
-        SELECT goods_id, school_id, goods_name, goods_img, goods_info, buyer_name, soldFlag, create_by,
-               create_time, update_by, update_time
-        FROM edu_goods
+        SELECT g.goods_id, g.goods_name, g.school_id, s.school_name, g.goods_img, g.goods_info, g.goods_price,
+               g.buyer_name, g.soldFlag, g.create_by, g.create_time, g.update_by, g.update_time
+        FROM edu_goods g
+            left join education.edu_school s on g.school_id = s.school_id
+
     </sql>
 
     <select id="selectGoodsList" parameterType="Goods" resultMap="GoodsResult">
@@ -29,6 +33,12 @@
         <where>
             <if test="goodsName != null and goodsName != ''">
                 AND goods_name LIKE CONCAT('%', #{goodsName}, '%')
+            </if>
+            <if test="schoolName != null and schoolName != ''">
+                AND school_name = #{schoolName}
+            </if>
+            <if test="buyerName != null and buyerName != ''">
+                AND buyer_name = #{buyerName}
             </if>
             <if test="soldFlag != null and soldFlag != ''">
                 AND soldFlag = #{soldFlag}
@@ -45,7 +55,7 @@
         UPDATE edu_goods
         <set>
             <if test="schoolId != null and schoolId != 0">school_id = #{schoolId},</if>
-            --             <if test="goodsName != null and goodsName != ''">goods_name = #{goodsName},</if>
+            <if test="goodsName != null and goodsName != ''">goods_name = #{goodsName},</if>
             <if test="goodsImg != null and goodsImg != ''">goods_img = #{goodsImg},</if>
             <if test="goodsInfo != null and goodsInfo != ''">goods_info = #{goodsInfo},</if>
             <if test="goodsPrice != null and goodsPrice != ''">goods_price = #{goodsPrice},</if>
@@ -61,7 +71,7 @@
         INSERT INTO edu_goods(
         <if test="goodsId != null and goodsId != 0">goods_id,</if>
         <if test="schoolId != null and schoolId != 0">school_id,</if>
-        --         <if test="goodsName != null and goodsName != ''">goods_name,</if>
+        <if test="goodsName != null and goodsName != ''">goods_name,</if>
         <if test="goodsImg != null and goodsImg != ''">goods_img,</if>
         <if test="goodsInfo != null and goodsInfo != ''">goods_info,</if>
         <if test="goodsPrice != null and goodsPrice != ''">goods_price,</if>
@@ -72,7 +82,7 @@
         ) VALUES (
         <if test="goodsId != null and goodsId != 0">#{goodsId},</if>
         <if test="schoolId != null and schoolId != 0">#{schoolId},</if>
-        --         <if test="goodsName != null and goodsName != ''">#{goodsName},</if>
+        <if test="goodsName != null and goodsName != ''">#{goodsName},</if>
         <if test="goodsImg != null and goodsImg != ''">#{goodsImg},</if>
         <if test="goodsInfo != null and goodsInfo != ''">#{goodsInfo},</if>
         <if test="goodsPrice != null and goodsPrice != ''">#{goodsPrice},</if>

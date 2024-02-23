@@ -32,6 +32,7 @@ create table edu_advertisement
 create table edu_goods
 (
     goods_id             bigint not null auto_increment,
+    goods_name            varchar(200),
     school_id            bigint,
     goods_img            varchar(200),
     goods_info           varchar(200),
@@ -44,6 +45,7 @@ create table edu_goods
     update_time          datetime,
     primary key (goods_id)
 );
+
 
 /*==============================================================*/
 /* Table: edu_post                                              */

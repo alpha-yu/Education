@@ -41,7 +41,7 @@ public class Wish extends BaseEntity{
     /**
      * 心愿发起学校名称
      */
-    @Excel(name = "心愿发起学校名称", cellType = Excel.ColumnType.NUMERIC)
+    @Excel(name = "心愿发起学校名称")
     private String wisherSchoolName;
 
     /**

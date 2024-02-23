@@ -1,28 +1,37 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="学校名称" prop="schoolName">
+      <el-form-item label="商品名称" prop="goodsName">
+        <el-input
+          v-model="queryParams.goodsName"
+          placeholder="请输入商品名称"
+          clearable
+          @keyup.enter.native="handleQuery"
+          style="width: 180px"
+        />
+      </el-form-item>
+      <el-form-item label="来源学校" prop="schoolName">
         <el-input
           v-model="queryParams.schoolName"
-          placeholder="请输入学校名称"
+          placeholder="请输入来源学校"
           clearable
           @keyup.enter.native="handleQuery"
           style="width: 180px"
         />
       </el-form-item>
-      <el-form-item label="学校地址" prop="schoolAddr">
+      <el-form-item label="购买人" prop="buyerName">
         <el-input
-          v-model="queryParams.schoolAddr"
-          placeholder="请输入学校地址"
+          v-model="queryParams.buyerName"
+          placeholder="请输入购买人"
           clearable
           @keyup.enter.native="handleQuery"
           style="width: 180px"
         />
       </el-form-item>
-      <el-form-item label="学校状态" prop="delFlag">
-        <el-select v-model="queryParams.delFlag" placeholder="状态" clearable style="width: 180px">
+      <el-form-item label="出售状态" prop="soldFlag">
+        <el-select v-model="queryParams.soldFlag" placeholder="出售状态" clearable style="width: 180px">
           <el-option
-            v-for="dict in dict.type.sys_normal_disable"
+            v-for="dict in dict.type.edu_goods_statu"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
@@ -43,7 +52,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['edu:school:add']"
+          v-hasPermi="['edu:goods:add']"
         >新增
         </el-button>
       </el-col>
@@ -55,7 +64,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['edu:school:edit']"
+          v-hasPermi="['edu:goods:edit']"
         >修改
         </el-button>
       </el-col>
@@ -67,7 +76,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['edu:school:remove']"
+          v-hasPermi="['edu:goods:remove']"
         >删除
         </el-button>
       </el-col>
@@ -78,31 +87,31 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['edu:school:export']"
+          v-hasPermi="['edu:goods:export']"
         >导出
         </el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="schoolList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="goodsList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="45" align="center"/>
-      <el-table-column label="LOGO" align="center" prop="schoolImg" width="100">
+      <el-table-column label="图片" align="center" prop="goodsImg" width="150">
         <template slot-scope="scope">
           <div style="height: 80px;width: 80px;display: grid;justify-items: center;align-items: center">
-            <img v-if="scope.row.schoolImg" :src="scope.row.schoolImg" style="max-height: 80px;max-width: 80px;"
+            <img v-if="scope.row.goodsImg" :src="scope.row.goodsImg" style="max-height: 80px;max-width: 130px;"
                  alt=""/>
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="名称" align="center" prop="schoolName" :show-overflow-tooltip="true" width="150"/>
-      <el-table-column label="简介" align="center" prop="schoolInfo" :show-overflow-tooltip="true" width="200"/>
-      <el-table-column label="联系方式" align="center" prop="schoolCif" :show-overflow-tooltip="true" width="150"/>
-      <el-table-column label="地址" align="center" prop="schoolAddr" :show-overflow-tooltip="true" width="250"/>
-      <el-table-column label="邮编" align="center" prop="schoolPc" :show-overflow-tooltip="true" width="100"/>
-      <el-table-column label="状态" align="center" prop="delFlag" width="80">
+      <el-table-column label="名称" align="center" prop="goodsName" :show-overflow-tooltip="true" width="150"/>
+      <el-table-column label="简介" align="center" prop="goodsInfo" :show-overflow-tooltip="true" width="200"/>
+      <el-table-column label="来源学校" align="center" prop="schoolName" :show-overflow-tooltip="true" width="150"/>
+      <el-table-column label="商品单价(元)" align="center" prop="goodsPrice" :show-overflow-tooltip="true" width="150"/>
+      <el-table-column label="购买人" align="center" prop="buyerName" :show-overflow-tooltip="true" width="150"/>
+      <el-table-column label="认领状态" align="center" prop="soldFlag" width="80">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.sys_normal_disable" :value="scope.row.delFlag"/>
+          <dict-tag :options="dict.type.edu_goods_statu" :value="scope.row.soldFlag"/>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -112,7 +121,7 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['edu:school:edit']"
+            v-hasPermi="['edu:goods:edit']"
           >修改
           </el-button>
           <el-button
@@ -120,7 +129,7 @@
             type="text"
             icon="el-icon-info"
             @click="handleInfo(scope.row)"
-            v-hasPermi="['edu:school:query']"
+            v-hasPermi="['edu:goods:query']"
           >详情
           </el-button>
           <el-button
@@ -128,7 +137,7 @@
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['edu:school:remove']"
+            v-hasPermi="['edu:goods:remove']"
           >删除
           </el-button>
         </template>
@@ -147,12 +156,12 @@
     <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-col :span="24">
-          <el-form-item label="学校名称" prop="schoolName">
-            <el-input v-model="form.schoolName" placeholder="请输入学校名称"/>
+          <el-form-item label="商品名称" prop="goodsName">
+            <el-input v-model="form.goodsName" placeholder="请输入心愿名称"/>
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="LOGO" prop="schoolImg">
+          <el-form-item label="图片" prop="goodsImg">
             <el-upload ref="upload" action="#" :http-request="httpRequest" :show-file-list="false"
                        :before-upload="beforeUpload">
               <el-button size="small" icon="el-icon-upload">选择</el-button>
@@ -161,40 +170,47 @@
         </el-col>
         <el-col :span="24">
           <el-form-item label="预览">
-            <el-image v-if="form.schoolImg" :src="form.schoolImg" style="width: 150px;object-fit: contain"
-                      :preview-src-list="[form.schoolImg]"/>
+            <el-image v-if="form.goodsImg" :src="form.goodsImg" style="width: 150px;object-fit: contain"
+                      :preview-src-list="[form.goodsImg]"/>
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="学校简介" prop="schoolInfo">
-            <el-input v-model="form.schoolInfo" placeholder="请输入学校简介" type="textarea" rows="2"/>
+          <el-form-item label="商品简介" prop="goodsInfo">
+            <el-input v-model="form.goodsInfo" placeholder="请输入心愿简介" type="textarea" rows="2"/>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="联系方式" prop="schoolCif">
-            <el-input v-model="form.schoolCif" placeholder="请输入联系方式"/>
+          <el-form-item label="来源学校" prop="schoolId">
+            <el-select v-model="form.schoolId" placeholder="请选择学校" filterable style="width: 300px">
+              <el-option
+                v-for="item in schoolOptions"
+                :key="item.schoolId"
+                :label="item.schoolName"
+                :value="item.schoolId"
+              ></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="学校邮编" prop="schoolPc">
-            <el-input v-model="form.schoolPc" placeholder="请输入学校邮编"/>
+          <el-form-item label="商品价格" prop="goodsPrice">
+            <el-input v-model="form.goodsPrice" placeholder="请输入商品价格"/>
           </el-form-item>
         </el-col>
-        <el-col :span="24">
-          <el-form-item label="学校地址" prop="schoolAddr">
-            <el-input v-model="form.schoolAddr" placeholder="请输入学校地址"/>
-          </el-form-item>
-        </el-col>
-        <el-col :span="24">
-          <el-form-item label="状态" prop="delFlag">
-            <el-radio-group v-model="form.delFlag">
+        <el-col :span="12">
+          <el-form-item label="出售状态" prop="soldFlag">
+            <el-radio-group v-model="form.soldFlag" @change="handleSoldFlagChange">
               <el-radio
-                v-for="dict in dict.type.sys_normal_disable"
+                v-for="dict in dict.type.edu_goods_statu"
                 :key="dict.value"
                 :label="dict.value"
               >{{ dict.label }}
               </el-radio>
             </el-radio-group>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="购买人" prop="buyerName">
+            <el-input v-model="form.buyerName" placeholder="请输入认领人" @change="handleBuyerNameInput"/>
           </el-form-item>
         </el-col>
       </el-form>
@@ -207,36 +223,42 @@
     <!-- 详情对话框 -->
     <el-dialog :title="title" :visible.sync="infoOpen" width="800px" append-to-body>
       <el-form ref="form" :model="form" label-width="80px">
-        <el-form-item label="学校名称">
-          <el-input v-model="form.schoolName" readonly/>
+        <el-form-item label="商品名称">
+          <el-input v-model="form.goodsName" placeholder="请输入心愿名称" readonly/>
         </el-form-item>
-        <el-form-item label="LOGO">
-          <el-image v-if="form.schoolImg" :src="form.schoolImg" style="width: 150px;object-fit: contain"
-                    :preview-src-list="[form.schoolImg]">
+        <el-form-item label="图片">
+          <el-image v-if="form.goodsImg" :src="form.goodsImg" style="width: 150px;object-fit: contain"
+                    :preview-src-list="[form.goodsImg]">
             <div slot="error" class="image-slot"/>
           </el-image>
         </el-form-item>
-        <el-form-item label="学校简介">
-          <el-input v-model="form.schoolInfo" type="textarea" rows="2" readonly/>
+        <el-form-item label="商品简介">
+          <el-input v-model="form.goodsInfo" type="textarea" rows="2" readonly/>
         </el-form-item>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="联系方式">
-              <el-input v-model="form.schoolCif" readonly/>
+            <el-form-item label="来源学校">
+              <el-input v-model="form.schoolName" readonly/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="学校邮编">
-              <el-input v-model="form.schoolPc" readonly/>
+            <el-form-item label="商品价格">
+              <el-input v-model="form.goodsPrice" readonly/>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="学校地址">
-          <el-input v-model="form.schoolAddr" readonly/>
-        </el-form-item>
-        <el-form-item label="状态">
-          <dict-tag :options="dict.type.sys_normal_disable" :value="form.delFlag"/>
-        </el-form-item>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="出售状态">
+              <dict-tag :options="dict.type.edu_goods_statu" :value="form.soldFlag"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="购买人">
+              <el-input v-model="form.buyerName" readonly/>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
     </el-dialog>
 
@@ -244,15 +266,15 @@
 </template>
 
 <script>
-import {listSchool, getSchool, updateSchool, addSchool, delSchool, uploadSchool} from "@/edu_api/school";
+import {listGoods, getGoods, updateGoods, addGoods, delGoods, uploadGoods} from "@/edu_api/goods";
 
 export default {
-  name: "School",
-  dicts: ['sys_normal_disable'],
+  name: "Goods",
+  dicts: ['edu_goods_statu'],
   data() {
     return {
       // 遮罩层
-      loading: true,
+      loading: false,
       // 选中数组
       ids: [],
       names: [],
@@ -264,8 +286,10 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 学校数据
-      schoolList: [],
+      // 商品数据
+      goodsList: [],
+      // 学校选项
+      schoolOptions: [],
       // 弹出层标题
       title: "",
       // 是否显示修改弹出层
@@ -276,39 +300,39 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
+        goodsName: undefined,
         schoolName: undefined,
-        delFlag: undefined
+        buyerName: undefined,
+        soldFlag: undefined
       },
       // 表单参数
       form: {
+        goodsId: undefined,
+        goodsName: undefined,
+        goodsImg: undefined,
+        goodsInfo: undefined,
         schoolId: undefined,
         schoolName: undefined,
-        schoolImg: undefined,
-        schoolInfo: undefined,
-        schoolCif: undefined,
-        schoolAddr: undefined,
-        schoolPc: undefined,
-        delFlag: '0'
+        goodsPrice: undefined,
+        buyerName: undefined,
+        soldFlag: '0'
       },
       // 表单校验
       rules: {
-        schoolName: [
-          {required: true, message: "学校名称不能为空", trigger: "blur"}
+        goodsName: [
+          {required: true, message: "商品名称不能为空", trigger: "blur"}
         ],
-        schoolImg: [
-          {required: true, message: "未上传学校LOGO", trigger: "blur"}
+        // goodsImg: [
+        //   {required: true, message: "未上传商品图片", trigger: "blur"}
+        // ],
+        schoolId: [
+          {required: true, message: "学校不能为空", trigger: "blur"}
         ],
-        schoolCif: [
-          {required: true, message: "联系方式不能为空", trigger: "blur"}
-        ],
-        schoolAddr: [
-          {required: true, message: "学校地址不能为空", trigger: "blur"}
-        ],
-        schoolPc: [
-          {required: true, message: "学校邮编不能为空", trigger: "blur"},
+        goodsPrice: [
+          {required: true, message: "商品价格不能为空", trigger: "blur"},
           {
-            pattern: /^[0-9]{6}$/,
-            message: "邮编格式有误",
+            pattern: /^\d+(\.\d{1,2})?$/,
+            message: "价格输入有误(请输入数字并且最大输入两位小数)",
             trigger: ["blur", "change"]
           }
         ]
@@ -322,8 +346,8 @@ export default {
     /** 查询字典类型列表 */
     getList() {
       this.loading = true;
-      listSchool(this.queryParams).then(response => {
-          this.schoolList = response.rows;
+      listGoods(this.queryParams).then(response => {
+          this.goodsList = response.rows;
           this.total = response.total;
           this.loading = false;
         }
@@ -337,14 +361,15 @@ export default {
     // 表单重置
     reset() {
       this.form = {
+        goodsId: undefined,
+        goodsName: undefined,
+        goodsImg: undefined,
+        goodsInfo: undefined,
         schoolId: undefined,
         schoolName: undefined,
-        schoolImg: undefined,
-        schoolInfo: undefined,
-        schoolCif: undefined,
-        schoolAddr: undefined,
-        schoolPc: undefined,
-        delFlag: '0'
+        goodsPrice: undefined,
+        buyerName: undefined,
+        soldFlag: '0'
       };
       this.resetForm("form");
     },
@@ -360,35 +385,39 @@ export default {
     },
     /** 多选框选中数据 */
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.schoolId)
-      this.names = selection.map(item => item.schoolName)
+      this.ids = selection.map(item => item.goodsId)
+      this.names = selection.map(item => item.goodsName)
       this.single = selection.length != 1
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
-      this.open = true;
-      this.title = "添加学校信息";
+      getGoods().then(response => {
+        this.schoolOptions = response.schools;
+        this.open = true;
+        this.title = "添加商品信息";
+      });
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const schoolId = row.schoolId || this.ids
-      getSchool(schoolId).then(response => {
+      const goodsId = row.goodsId || this.ids
+      getGoods(goodsId).then(response => {
+        this.schoolOptions = response.schools;
         this.form = response.data;
         this.open = true;
-        this.title = "修改学校信息";
+        this.title = "修改商品信息";
       });
     },
     /** 详细按钮操作 */
     handleInfo(row) {
       this.reset();
-      const schoolId = row.schoolId
-      getSchool(schoolId).then(response => {
+      const goodsId = row.goodsId
+      getGoods(goodsId).then(response => {
         this.form = response.data;
         this.infoOpen = true;
-        this.title = "学校信息详情";
+        this.title = "商品信息详情";
       });
     },
     /** 提交按钮 */
@@ -426,7 +455,7 @@ export default {
 
           // 文件上传
           this.$modal.msgWarning("正在上传");
-          uploadSchool(formData).then(response => {
+          uploadGoods(formData).then(response => {
             this.$modal.msgSuccess("上传成功");
             this.open = false;
             this.getList();
@@ -437,10 +466,10 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const schoolIds = row.schoolId || this.ids;
-      const schoolNames = row.schoolName || this.names;
-      this.$modal.confirm('是否确认删除学校名称为"' + schoolNames + '"的数据项？').then(function () {
-        return delSchool(schoolIds);
+      const goodsIds = row.goodsId || this.ids;
+      const goodsNames = row.goodsName || this.names;
+      this.$modal.confirm('是否确认删除商品名称为"' + goodsNames + '"的数据项？').then(function () {
+        return delGoods(goodsIds);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -449,9 +478,9 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('edu/school/export', {
+      this.download('edu/goods/export', {
         ...this.queryParams
-      }, `school_${new Date().getTime()}.xlsx`)
+      }, `goods_${new Date().getTime()}.xlsx`)
     },
 
     // 打开文件选择器
@@ -487,7 +516,7 @@ export default {
     handleUploadSuccess(files) {
       if (files.code === 200) {
         const {data} = files;
-        this.form.schoolImg = data.url;
+        this.form.goodsImg = data.url;
         this.isDisabled = true
       }
     },
@@ -500,6 +529,18 @@ export default {
     // 自定义的提交函数，取出文件设置进请求参数
     httpRequest(param) {
       this.form.file = param.file
+    },
+    // 处理购买人输入
+    handleBuyerNameInput() {
+      if (this.form.buyerName != "") {
+        this.form.soldFlag = "1"
+      }
+    },
+    // 处理出售状态切换
+    handleSoldFlagChange() {
+      if (this.form.soldFlag != "1") {
+        this.form.buyerName = undefined
+      }
     }
   }
 };
