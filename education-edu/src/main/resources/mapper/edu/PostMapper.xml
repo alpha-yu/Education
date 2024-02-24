@@ -5,8 +5,8 @@
 <mapper namespace="com.education.edu.mapper.PostMapper">
 
     <resultMap type="Post" id="PostResult">
-        <id     property="postId"       column="post_id"       />
-        <id     property="schoolId"     column="school_id"     />
+        <result     property="postId"       column="post_id"       />
+        <result    property="schoolId"     column="school_id"     />
         <result property="postInfo"     column="post_info"     />
         <result property="comFlag"      column="comFlag"       />
         <result property="createBy"     column="create_by"     />
@@ -60,7 +60,7 @@
         )values(
         <if test="postId != null and postId != 0">#{postId},</if>
         <if test="schoolId != null and schoolId != ''">#{schoolId},</if>
-        <if test="PostInfo != null and postInfo != ''">#{postInfo},</if>
+        <if test="postInfo != null and postInfo != ''">#{postInfo},</if>
         <if test="comFlag != null and comFlag != ''">#{comFlag},</if>
         <if test="createBy != null and createBy != ''">#{createBy},</if>
         sysdate()

@@ -18,7 +18,7 @@ public class Advertisement extends BaseEntity {
      * 广告信息
      */
     @Excel(name = "广告信息")
-    private String adInfo;
+    private String advertisementInfo;
 
     /**
      * 广告图片
@@ -45,12 +45,12 @@ public class Advertisement extends BaseEntity {
         this.adId = adId;
     }
 
-    public String getAdInfo() {
-        return adInfo;
+    public String getAdvertisementInfo() {
+        return advertisementInfo;
     }
 
-    public void setAdInfo(String adInfo) {
-        this.adInfo = adInfo;
+    public void setAdvertisementInfo(String advertisementInfo) {
+        this.advertisementInfo = advertisementInfo;
     }
 
     public String getAdImg() {
@@ -81,7 +81,7 @@ public class Advertisement extends BaseEntity {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
                 .append("adId", getAdId())
-                .append("adInfo", getAdInfo())
+                .append("adInfo", getAdvertisementInfo())
                 .append("adImg", getAdImg())
                 .append("useFlag", getUseFlag())
                 .append("createBy", getCreateBy())

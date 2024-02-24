@@ -60,7 +60,7 @@
             <if test="goodsInfo != null and goodsInfo != ''">goods_info = #{goodsInfo},</if>
             <if test="goodsPrice != null and goodsPrice != ''">goods_price = #{goodsPrice},</if>
             <if test="buyerName != null and buyerName != ''">buyer_name = #{buyerName},</if>
-            <if test="soldFlag != null and delFlag != ''">soldFlag = #{soldFlag},</if>
+            <if test="soldFlag != null and soldFlag != ''">soldFlag = #{soldFlag},</if>
             <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
             update_time = SYSDATE()
         </set>

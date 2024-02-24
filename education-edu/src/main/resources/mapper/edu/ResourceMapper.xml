@@ -27,7 +27,7 @@
         from edu_resource
     </sql>
 
-    <select id="selectResourceList" parameterType="Resource" resultMap="ResourceResult">
+    <select id="selectResourceList" parameterType="Resource" resultMap="ResourceResult">ben
         <include refid="selectResourceVo"/>
         <where>
             <if test="resourceName != null and resourceName != ''">

@@ -11,6 +11,7 @@ import com.education.common.utils.file.FileUploadUtils;
 import com.education.common.utils.file.MimeTypeUtils;
 import com.education.common.utils.poi.ExcelUtil;
 import com.education.edu.domain.Post;
+import com.education.edu.domain.Resource;
 import com.education.edu.domain.School;
 import com.education.edu.service.IPostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,4 +95,25 @@ public class PostController  extends BaseController{
         util.exportExcel(response, list, "志愿岗位数据");
     }
 
+    /**
+     * 处理带有文件的表单
+     */
+    @PreAuthorize("@ss.hasPermi('edu:post:edit')")
+    @Log(title = "资源信息", businessType = BusinessType.UPDATE)
+    @PostMapping("/upload")
+    public AjaxResult upload(@RequestParam("file") MultipartFile file, Post post) throws Exception {
+//        if (!file.isEmpty()) {
+//            String avatar = FileUploadUtils.upload(RuoYiConfig.getAvatarPath(), file, MimeTypeUtils.IMAGE_EXTENSION);
+//            post.setResourceImg(post.getApi() + avatar);
+//        }
+        if (post.getPostId() == null) {
+            post.setCreateBy(getUsername());
+            return toAjax(postService.insertPost(post));
+        }
+        if (post.getPostId() != null) {
+            post.setUpdateBy(getUsername());
+            return toAjax(postService.updatePost(post));
+        }
+        return AjaxResult.error();
+    }
 }
