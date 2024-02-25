@@ -1,41 +1,15 @@
 <template>
   <div class="app-container">
-    <el-row :gutter="20">
-      <!--部门数据-->
-      <el-col :span="4" :xs="24">
-        <div class="head-container">
-          <el-input
-            v-model="deptName"
-            placeholder="请输入部门名称"
-            clearable
-            size="small"
-            prefix-icon="el-icon-search"
-            style="margin-bottom: 20px"
-          />
-        </div>
-        <div class="head-container">
-          <el-tree
-            :data="deptOptions"
-            :props="defaultProps"
-            :expand-on-click-node="false"
-            :filter-node-method="filterNode"
-            ref="tree"
-            node-key="id"
-            default-expand-all
-            highlight-current
-            @node-click="handleNodeClick"
-          />
-        </div>
-      </el-col>
+    <el-row :gutter="24">
       <!--用户数据-->
-      <el-col :span="20" :xs="24">
-        <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+      <el-col :span="24" :xs="24">
+        <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch">
           <el-form-item label="用户名称" prop="userName">
             <el-input
               v-model="queryParams.userName"
               placeholder="请输入用户名称"
               clearable
-              style="width: 240px"
+              style="width: 180px"
               @keyup.enter.native="handleQuery"
             />
           </el-form-item>
@@ -44,7 +18,7 @@
               v-model="queryParams.phonenumber"
               placeholder="请输入手机号码"
               clearable
-              style="width: 240px"
+              style="width: 180px"
               @keyup.enter.native="handleQuery"
             />
           </el-form-item>
@@ -53,7 +27,7 @@
               v-model="queryParams.status"
               placeholder="用户状态"
               clearable
-              style="width: 240px"
+              style="width: 180px"
             >
               <el-option
                 v-for="dict in dict.type.sys_normal_disable"
@@ -141,9 +115,8 @@
           <el-table-column label="用户编号" align="center" key="userId" prop="userId" v-if="columns[0].visible" />
           <el-table-column label="用户名称" align="center" key="userName" prop="userName" v-if="columns[1].visible" :show-overflow-tooltip="true" />
           <el-table-column label="用户昵称" align="center" key="nickName" prop="nickName" v-if="columns[2].visible" :show-overflow-tooltip="true" />
-          <el-table-column label="部门" align="center" key="deptName" prop="dept.deptName" v-if="columns[3].visible" :show-overflow-tooltip="true" />
-          <el-table-column label="手机号码" align="center" key="phonenumber" prop="phonenumber" v-if="columns[4].visible" width="120" />
-          <el-table-column label="状态" align="center" key="status" v-if="columns[5].visible">
+          <el-table-column label="手机号码" align="center" key="phonenumber" prop="phonenumber" v-if="columns[3].visible" width="120" />
+          <el-table-column label="状态" align="center" key="status" v-if="columns[4].visible">
             <template slot-scope="scope">
               <el-switch
                 v-model="scope.row.status"
@@ -153,7 +126,7 @@
               ></el-switch>
             </template>
           </el-table-column>
-          <el-table-column label="创建时间" align="center" prop="createTime" v-if="columns[6].visible" width="160">
+          <el-table-column label="创建时间" align="center" prop="createTime" v-if="columns[5].visible" width="160">
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.createTime) }}</span>
             </template>
@@ -161,7 +134,6 @@
           <el-table-column
             label="操作"
             align="center"
-            width="160"
             class-name="small-padding fixed-width"
           >
             <template slot-scope="scope" v-if="scope.row.userId !== 1">
@@ -183,9 +155,9 @@
                 <el-button size="mini" type="text" icon="el-icon-d-arrow-right">更多</el-button>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item command="handleResetPwd" icon="el-icon-key"
-                    v-hasPermi="['system:user:resetPwd']">重置密码</el-dropdown-item>
+                                    v-hasPermi="['system:user:resetPwd']">重置密码</el-dropdown-item>
                   <el-dropdown-item command="handleAuthRole" icon="el-icon-circle-check"
-                    v-hasPermi="['system:user:edit']">分配角色</el-dropdown-item>
+                                    v-hasPermi="['system:user:edit']">分配角色</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </template>
@@ -212,8 +184,15 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="归属部门" prop="deptId">
-              <treeselect v-model="form.deptId" :options="deptOptions" :show-count="true" placeholder="请选择归属部门" />
+            <el-form-item label="用户性别">
+              <el-select v-model="form.sex" placeholder="请选择性别">
+                <el-option
+                  v-for="dict in dict.type.sys_user_sex"
+                  :key="dict.value"
+                  :label="dict.label"
+                  :value="dict.value"
+                ></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -243,13 +222,14 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="用户性别">
-              <el-select v-model="form.sex" placeholder="请选择性别">
+            <el-form-item label="角色">
+              <el-select v-model="form.roleIds" multiple placeholder="请选择角色">
                 <el-option
-                  v-for="dict in dict.type.sys_user_sex"
-                  :key="dict.value"
-                  :label="dict.label"
-                  :value="dict.value"
+                  v-for="item in roleOptions"
+                  :key="item.roleId"
+                  :label="item.roleName"
+                  :value="item.roleId"
+                  :disabled="item.status == 1"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -263,34 +243,6 @@
                   :label="dict.value"
                 >{{dict.label}}</el-radio>
               </el-radio-group>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="岗位">
-              <el-select v-model="form.postIds" multiple placeholder="请选择岗位">
-                <el-option
-                  v-for="item in postOptions"
-                  :key="item.postId"
-                  :label="item.postName"
-                  :value="item.postId"
-                  :disabled="item.status == 1"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="角色">
-              <el-select v-model="form.roleIds" multiple placeholder="请选择角色">
-                <el-option
-                  v-for="item in roleOptions"
-                  :key="item.roleId"
-                  :label="item.roleName"
-                  :value="item.roleId"
-                  :disabled="item.status == 1"
-                ></el-option>
-              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -378,8 +330,6 @@ export default {
       initPassword: undefined,
       // 日期范围
       dateRange: [],
-      // 岗位选项
-      postOptions: [],
       // 角色选项
       roleOptions: [],
       // 表单参数
@@ -417,10 +367,9 @@ export default {
         { key: 0, label: `用户编号`, visible: true },
         { key: 1, label: `用户名称`, visible: true },
         { key: 2, label: `用户昵称`, visible: true },
-        { key: 3, label: `部门`, visible: true },
-        { key: 4, label: `手机号码`, visible: true },
-        { key: 5, label: `状态`, visible: true },
-        { key: 6, label: `创建时间`, visible: true }
+        { key: 3, label: `手机号码`, visible: true },
+        { key: 4, label: `状态`, visible: true },
+        { key: 5, label: `创建时间`, visible: true }
       ],
       // 表单校验
       rules: {
@@ -460,7 +409,6 @@ export default {
   },
   created() {
     this.getList();
-    this.getDeptTree();
     this.getConfigKey("sys.user.initPassword").then(response => {
       this.initPassword = response.msg;
     });
@@ -475,12 +423,6 @@ export default {
           this.loading = false;
         }
       );
-    },
-    /** 查询部门下拉树结构 */
-    getDeptTree() {
-      deptTreeSelect().then(response => {
-        this.deptOptions = response.data;
-      });
     },
     // 筛选节点
     filterNode(value, data) {
@@ -521,7 +463,6 @@ export default {
         sex: undefined,
         status: "0",
         remark: undefined,
-        postIds: [],
         roleIds: []
       };
       this.resetForm("form");
@@ -562,7 +503,6 @@ export default {
     handleAdd() {
       this.reset();
       getUser().then(response => {
-        this.postOptions = response.posts;
         this.roleOptions = response.roles;
         this.open = true;
         this.title = "添加用户";
@@ -575,9 +515,7 @@ export default {
       const userId = row.userId || this.ids;
       getUser(userId).then(response => {
         this.form = response.data;
-        this.postOptions = response.posts;
         this.roleOptions = response.roles;
-        this.$set(this.form, "postIds", response.postIds);
         this.$set(this.form, "roleIds", response.roleIds);
         this.open = true;
         this.title = "修改用户";
@@ -593,10 +531,10 @@ export default {
         inputPattern: /^.{5,20}$/,
         inputErrorMessage: "用户密码长度必须介于 5 和 20 之间"
       }).then(({ value }) => {
-          resetUserPwd(row.userId, value).then(response => {
-            this.$modal.msgSuccess("修改成功，新密码是：" + value);
-          });
-        }).catch(() => {});
+        resetUserPwd(row.userId, value).then(response => {
+          this.$modal.msgSuccess("修改成功，新密码是：" + value);
+        });
+      }).catch(() => {});
     },
     /** 分配角色操作 */
     handleAuthRole: function(row) {

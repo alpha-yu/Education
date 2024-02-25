@@ -16,10 +16,8 @@ import com.education.common.exception.ServiceException;
 import com.education.common.utils.SecurityUtils;
 import com.education.common.utils.StringUtils;
 import com.education.common.utils.spring.SpringUtils;
-import com.education.system.domain.SysRoleDept;
 import com.education.system.domain.SysRoleMenu;
 import com.education.system.domain.SysUserRole;
-import com.education.system.mapper.SysRoleDeptMapper;
 import com.education.system.mapper.SysRoleMapper;
 import com.education.system.mapper.SysRoleMenuMapper;
 import com.education.system.mapper.SysUserRoleMapper;
@@ -41,9 +39,6 @@ public class SysRoleServiceImpl implements ISysRoleService
 
     @Autowired
     private SysUserRoleMapper userRoleMapper;
-
-    @Autowired
-    private SysRoleDeptMapper roleDeptMapper;
 
     /**
      * 根据条件分页查询角色数据
@@ -276,11 +271,7 @@ public class SysRoleServiceImpl implements ISysRoleService
     public int authDataScope(SysRole role)
     {
         // 修改角色信息
-        roleMapper.updateRole(role);
-        // 删除角色与部门关联
-        roleDeptMapper.deleteRoleDeptByRoleId(role.getRoleId());
-        // 新增角色和部门信息（数据权限）
-        return insertRoleDept(role);
+        return roleMapper.updateRole(role);
     }
 
     /**
@@ -308,30 +299,6 @@ public class SysRoleServiceImpl implements ISysRoleService
     }
 
     /**
-     * 新增角色部门信息(数据权限)
-     *
-     * @param role 角色对象
-     */
-    public int insertRoleDept(SysRole role)
-    {
-        int rows = 1;
-        // 新增角色与部门（数据权限）管理
-        List<SysRoleDept> list = new ArrayList<SysRoleDept>();
-        for (Long deptId : role.getDeptIds())
-        {
-            SysRoleDept rd = new SysRoleDept();
-            rd.setRoleId(role.getRoleId());
-            rd.setDeptId(deptId);
-            list.add(rd);
-        }
-        if (list.size() > 0)
-        {
-            rows = roleDeptMapper.batchRoleDept(list);
-        }
-        return rows;
-    }
-
-    /**
      * 通过角色ID删除角色
      * 
      * @param roleId 角色ID
@@ -343,8 +310,6 @@ public class SysRoleServiceImpl implements ISysRoleService
     {
         // 删除角色与菜单关联
         roleMenuMapper.deleteRoleMenuByRoleId(roleId);
-        // 删除角色与部门关联
-        roleDeptMapper.deleteRoleDeptByRoleId(roleId);
         return roleMapper.deleteRoleById(roleId);
     }
 
@@ -370,8 +335,6 @@ public class SysRoleServiceImpl implements ISysRoleService
         }
         // 删除角色与菜单关联
         roleMenuMapper.deleteRoleMenu(roleIds);
-        // 删除角色与部门关联
-        roleDeptMapper.deleteRoleDept(roleIds);
         return roleMapper.deleteRoleByIds(roleIds);
     }
 

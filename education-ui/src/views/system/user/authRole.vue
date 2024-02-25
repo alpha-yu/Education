@@ -33,7 +33,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination v-show="total>0" :total="total" :page.sync="pageNum" :limit.sync="pageSize" />
 
     <el-form label-width="100px">
@@ -52,7 +52,7 @@ export default {
   name: "AuthRole",
   data() {
     return {
-       // 遮罩层
+      // 遮罩层
       loading: true,
       // 分页信息
       total: 0,

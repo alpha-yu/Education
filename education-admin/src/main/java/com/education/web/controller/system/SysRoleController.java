@@ -27,7 +27,6 @@ import com.education.common.utils.poi.ExcelUtil;
 import com.education.framework.web.service.SysPermissionService;
 import com.education.framework.web.service.TokenService;
 import com.education.system.domain.SysUserRole;
-import com.education.system.service.ISysDeptService;
 import com.education.system.service.ISysRoleService;
 import com.education.system.service.ISysUserService;
 
@@ -51,9 +50,6 @@ public class SysRoleController extends BaseController
 
     @Autowired
     private ISysUserService userService;
-
-    @Autowired
-    private ISysDeptService deptService;
 
     @PreAuthorize("@ss.hasPermi('system:role:list')")
     @GetMapping("/list")
@@ -245,18 +241,5 @@ public class SysRoleController extends BaseController
     {
         roleService.checkRoleDataScope(roleId);
         return toAjax(roleService.insertAuthUsers(roleId, userIds));
-    }
-
-    /**
-     * 获取对应角色部门树列表
-     */
-    @PreAuthorize("@ss.hasPermi('system:role:query')")
-    @GetMapping(value = "/deptTree/{roleId}")
-    public AjaxResult deptTree(@PathVariable("roleId") Long roleId)
-    {
-        AjaxResult ajax = AjaxResult.success();
-        ajax.put("checkedKeys", deptService.selectDeptListByRoleId(roleId));
-        ajax.put("depts", deptService.selectDeptTreeList(new SysDept()));
-        return ajax;
     }
 }
