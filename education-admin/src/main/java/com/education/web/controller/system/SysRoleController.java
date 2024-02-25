@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.education.common.annotation.Log;
 import com.education.common.core.controller.BaseController;
 import com.education.common.core.domain.AjaxResult;
-import com.education.common.core.domain.entity.SysDept;
 import com.education.common.core.domain.entity.SysRole;
 import com.education.common.core.domain.entity.SysUser;
 import com.education.common.core.domain.model.LoginUser;
