@@ -43,14 +43,3 @@ export function delPost(postId) {
     method: 'delete'
   })
 }
-
-// 处理带有上传文件的表单，insert和update在后端处理中区分
-export function uploadPost(data) {
-  return request({
-    url: '/edu/post/upload',
-    method: 'post',
-    data: data,
-    contentType: 'multipart/form-data'
-  })
-}
-

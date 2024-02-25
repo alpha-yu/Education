@@ -78,6 +78,7 @@
 
     <el-table v-loading="loading" :data="adList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="45" align="center"/>
+      <el-table-column label="编号" align="center" prop="adId" :show-overflow-tooltip="true" width="100"/>
       <el-table-column label="展示图片" align="center" prop="adImg" width="100">
         <template slot-scope="scope">
           <div style="height: 100px;width: 80px;display: grid;justify-items: center;align-items: center">
@@ -86,7 +87,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="广告内容" align="center" prop="adInfo" :show-overflow-tooltip="true" width="850"/>
+      <el-table-column label="广告内容" align="center" prop="adInfo" :show-overflow-tooltip="true" width="750"/>
       <el-table-column label="广告状态" align="center" prop="useFlag" width="80">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.edu_advertisement_statu" :value="scope.row.useFlag"/>

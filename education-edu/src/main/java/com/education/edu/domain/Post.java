@@ -17,8 +17,13 @@ public class Post extends BaseEntity{
     /**
      * 需求来源学校序号
      */
-    @Excel(name = "需求来源学校序号", cellType = Excel.ColumnType.NUMERIC)
     private Long schoolId;
+
+    /**
+     * 岗位需求学校名称
+     */
+    @Excel(name = "岗位需求学校名称")
+    private String schoolName;
 
     /**
      * 志愿岗位内容
@@ -48,6 +53,14 @@ public class Post extends BaseEntity{
         this.schoolId = schoolId;
     }
 
+    public String getSchoolName() {
+        return schoolName;
+    }
+
+    public void setSchoolName(String schoolName) {
+        this.schoolName = schoolName;
+    }
+
     public String getPostInfo() {
         return postInfo;
     }
@@ -69,6 +82,7 @@ public class Post extends BaseEntity{
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
                 .append("postId", getPostId())
                 .append("schoolId", getSchoolId())
+                .append("schoolName", getSchoolName())
                 .append("postInfo", getPostInfo())
                 .append("comFlag", getComFlag())
                 .append("createBy", getCreateBy())

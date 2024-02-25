@@ -453,7 +453,7 @@ export default {
           if (this.form.file != null) {
             formData.append("file", this.form.file);
             this.form.api = process.env.VUE_APP_BASE_API;
-            this.form.schoolImg = "";
+            this.form.wishImg = "";
           } else {
             formData.append("file", new Blob());
           }
@@ -522,9 +522,9 @@ export default {
       }
       const reader = new FileReader();
       reader.readAsDataURL(file);
-      this.form.schoolImg = null;
+      this.form.wishImg = null;
       reader.onload = () => {
-        this.form.schoolImg = reader.result;
+        this.form.wishImg = reader.result;
       };
       this.$modal.msgWarning("正在处理");
       return isImg;
@@ -541,7 +541,7 @@ export default {
     handleUploadSuccess(files) {
       if (files.code === 200) {
         const {data} = files;
-        this.form.schoolImg = data.url;
+        this.form.wishImg = data.url;
         this.isDisabled = true
       }
     },

@@ -10,7 +10,7 @@
 
     <name>education</name>
     <url>http://www.ruoyi.vip</url>
-    <description>乡村教育资源服务共享平台</description>
+    <description>乡村教育资源服务共享后台管理系统</description>
     
     <properties>
         <education.version>3.8.6</education.version>

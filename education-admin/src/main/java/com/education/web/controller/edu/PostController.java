@@ -7,13 +7,16 @@ import com.education.common.core.controller.BaseController;
 import com.education.common.core.domain.AjaxResult;
 import com.education.common.core.page.TableDataInfo;
 import com.education.common.enums.BusinessType;
+import com.education.common.utils.StringUtils;
 import com.education.common.utils.file.FileUploadUtils;
 import com.education.common.utils.file.MimeTypeUtils;
 import com.education.common.utils.poi.ExcelUtil;
 import com.education.edu.domain.Post;
 import com.education.edu.domain.Resource;
 import com.education.edu.domain.School;
+import com.education.edu.mapper.SchoolMapper;
 import com.education.edu.service.IPostService;
+import com.education.edu.service.ISchoolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,9 +30,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/edu/post")
-public class PostController  extends BaseController{
+public class PostController extends BaseController {
 
-    @Autowired private IPostService postService;
+    @Autowired
+    private IPostService postService;
+
+    @Autowired
+    private ISchoolService schoolService;
 
     /**
      * 获取岗位列表
@@ -46,9 +53,15 @@ public class PostController  extends BaseController{
      * 根据岗位编号获取详细信息
      */
     @PreAuthorize("@ss.hasPermi('edu:post:query')")
-    @GetMapping(value = "/{postId}")
-    public AjaxResult getInfo(@PathVariable Long postId) {
-        return success(postService.selectPostById(postId));
+    @GetMapping(value = {"/", "{postId}"})
+    public AjaxResult getInfo(@PathVariable(value = "postId", required = false) Long postId) {
+        AjaxResult ajax = AjaxResult.success();
+        ajax.put("schools", schoolService.selectSchoolAll());
+        if (StringUtils.isNotNull(postId)) {
+            Post post = postService.selectPostById(postId);
+            ajax.put(AjaxResult.DATA_TAG, post);
+        }
+        return ajax;
     }
 
     /**
@@ -93,27 +106,5 @@ public class PostController  extends BaseController{
         List<Post> list = postService.selectPostList(post);
         ExcelUtil<Post> util = new ExcelUtil<Post>(Post.class);
         util.exportExcel(response, list, "志愿岗位数据");
-    }
-
-    /**
-     * 处理带有文件的表单
-     */
-    @PreAuthorize("@ss.hasPermi('edu:post:edit')")
-    @Log(title = "资源信息", businessType = BusinessType.UPDATE)
-    @PostMapping("/upload")
-    public AjaxResult upload(@RequestParam("file") MultipartFile file, Post post) throws Exception {
-//        if (!file.isEmpty()) {
-//            String avatar = FileUploadUtils.upload(RuoYiConfig.getAvatarPath(), file, MimeTypeUtils.IMAGE_EXTENSION);
-//            post.setResourceImg(post.getApi() + avatar);
-//        }
-        if (post.getPostId() == null) {
-            post.setCreateBy(getUsername());
-            return toAjax(postService.insertPost(post));
-        }
-        if (post.getPostId() != null) {
-            post.setUpdateBy(getUsername());
-            return toAjax(postService.updatePost(post));
-        }
-        return AjaxResult.error();
     }
 }
