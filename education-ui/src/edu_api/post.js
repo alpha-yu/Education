@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 import {parseStrEmpty} from "@/utils/ruoyi";
 
-// 查询商品列表
+// 查询岗位列表
 export function listPost(query) {
   return request({
     url: '/edu/post/list',
@@ -10,7 +10,7 @@ export function listPost(query) {
   })
 }
 
-// 查询商品详细
+// 查询岗位详细
 export function getPost(postId) {
   return request({
     url: '/edu/post/' + parseStrEmpty(postId),
@@ -18,7 +18,7 @@ export function getPost(postId) {
   })
 }
 
-// 新增商品信息
+// 新增岗位信息
 export function addPost(data) {
   return request({
     url: '/edu/post',
@@ -27,7 +27,7 @@ export function addPost(data) {
   })
 }
 
-// 修改商品信息
+// 修改岗位信息
 export function updatePost(data) {
   return request({
     url: '/edu/post',
@@ -36,7 +36,7 @@ export function updatePost(data) {
   })
 }
 
-// 删除商品信息
+// 删除岗位信息
 export function delPost(postId) {
   return request({
     url: '/edu/post/' + postId,

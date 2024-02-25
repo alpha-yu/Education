@@ -112,12 +112,12 @@
       <el-table-column label="展示图片" align="center" prop="resourceImg" width="100">
         <template slot-scope="scope">
           <div style="height: 100px;width: 80px;display: grid;justify-items: center;align-items: center">
-            <img v-if="scope.row.resourceImg" :src="scope.row.resourceImg" style="max-height: 100px;max-width: 80px;"
-                 alt=""/>
+            <img v-if="scope.row.resourceImg" :src="scope.row.resourceImg" alt=""
+                 style="max-height: 100px;max-width: 80px;position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);"/>
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="资源网址" align="center" prop="resourceUrl" :show-overflow-tooltip="true" width="200"/>
+      <el-table-column label="资源网址" align="center" prop="resourceUrl" :show-overflow-tooltip="true" width="300"/>
       <el-table-column label="类型" align="center" prop="resourceType" :show-overflow-tooltip="true" width="100">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.edu_resource_type" :value="scope.row.resourceType"/>
@@ -133,7 +133,7 @@
           <dict-tag :options="dict.type.edu_resource_object" :value="scope.row.resourceObject"/>
         </template>
       </el-table-column>
-      <el-table-column label="版本" align="center" prop="resourceVer" :show-overflow-tooltip="true" width="200"/>
+      <el-table-column label="版本" align="center" prop="resourceVer" :show-overflow-tooltip="true" width="100"/>
       <el-table-column label="状态" align="center" prop="norFlag" width="80">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.edu_resource_statu" :value="scope.row.norFlag"/>
@@ -308,6 +308,30 @@
         <el-form-item label="状态">
           <dict-tag :options="dict.type.edu_resource_statu" :value="form.norFlag"/>
         </el-form-item>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="创建人">
+              <el-input v-model="form.createBy" readonly/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="创建时间">
+              <el-input v-model="form.createTime" readonly/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="修改人">
+              <el-input v-model="form.updateBy" readonly/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="修改时间">
+              <el-input v-model="form.updateTime" readonly/>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
     </el-dialog>
 
@@ -365,7 +389,11 @@ export default {
         resourceGrade: '0',
         resourceObject: '0',
         resourceVer: undefined,
-        norFlag: '0'
+        norFlag: '0',
+        createBy: undefined,
+        createTime: undefined,
+        updateBy: undefined,
+        updateTime: undefined
       },
       // 表单校验
       rules: {
@@ -424,7 +452,11 @@ export default {
         resourceGrade: '0',
         resourceObject: '0',
         resourceVer: undefined,
-        norFlag: '0'
+        norFlag: '0',
+        createBy: undefined,
+        createTime: undefined,
+        updateBy: undefined,
+        updateTime: undefined
       };
       this.resetForm("form");
     },

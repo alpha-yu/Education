@@ -5,26 +5,29 @@
 <mapper namespace="com.education.edu.mapper.AdvertisementMapper">
 
     <resultMap type="Advertisement" id="AdvertisementResult">
-        <id     property="adId"                column="ad_id"         />
-        <result property="advertisementInfo"   column="ad_info"       />
-        <result property="adImg"               column="ad_img"        />
-        <result property="useFlag"             column="useFlag"       />
-        <result property="createBy"            column="create_by"     />
-        <result property="createTime"          column="create_time"   />
-        <result property="updateBy"            column="update_by"     />
-        <result property="updateTime"          column="update_time"   />
+        <id     property="adId"         column="ad_id"         />
+        <result property="adInfo"       column="ad_info"       />
+        <result property="adImg"        column="ad_img"        />
+        <result property="useFlag"      column="useFlag"       />
+        <result property="createBy"     column="create_by"     />
+        <result property="createTime"   column="create_time"   />
+        <result property="updateBy"     column="update_by"     />
+        <result property="updateTime"   column="update_time"   />
     </resultMap>
 
     <sql id="selectAdvertisementVo">
         select ad_id, ad_info, ad_img, useFlag, create_by, create_time, update_by, update_time
-        from edu_ad
+        from edu_advertisement
     </sql>
 
     <select id="selectAdvertisementList" parameterType="Advertisement" resultMap="AdvertisementResult">
         <include refid="selectAdvertisementVo"/>
         <where>
+            <if test="adInfo != null and adInfo != ''">
+                AND ad_info LIKE CONCAT('%', #{adInfo}, '%')
+            </if>
             <if test="useFlag != null and useFlag != ''">
-                AND useflag = #{useFlag}
+                AND useFlag = #{useFlag}
             </if>
         </where>
     </select>
@@ -35,9 +38,9 @@
     </select>
 
     <update id="updateAdvertisement" parameterType="Advertisement">
-        update edu_ad
+        update edu_advertisement
         <set>
-            <if test="advertisementInfo != null and advertisementInfo != ''">ad_info = #{advertisementInfo},</if>
+            <if test="adInfo != null and adInfo != ''">ad_info = #{adInfo},</if>
             <if test="adImg != null and adImg != ''">ad_img = #{adImg},</if>
             <if test="useFlag != null and useFlag != ''">useFlag = #{useFlag},</if>
             <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
@@ -47,25 +50,25 @@
     </update>
 
     <insert id="insertAdvertisement" parameterType="Advertisement" useGeneratedKeys="true" keyProperty="adId">
-        insert into edu_ad(
-        <if test="adId != null and adId != 0">ad_id,</if>
-        <if test="advertisementInfo != null and advertisementInfo != ''">ad_info,</if>
-        <if test="adImg != null and adImg != ''">ad_img,</if>
-        <if test="useFlag != null and useFlag != ''">useFlag,</if>
-        <if test="createBy != null and createBy != ''">create_by,</if>
-        create_time
+        insert into edu_advertisement(
+            <if test="adId != null and adId != 0">ad_id,</if>
+            <if test="adInfo != null and adInfo != ''">ad_info,</if>
+            <if test="adImg != null and adImg != ''">ad_img,</if>
+            <if test="useFlag != null and useFlag != ''">useFlag,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            create_time
         )values(
-        <if test="adId != null and adId != 0">#{adId},</if>
-        <if test="advertisementInfo != null and advertisementInfo != ''">#{advertisementInfo},</if>
-        <if test="adImg != null and adImg != ''">#{adImg},</if>
-        <if test="useFlag != null and useFlag != ''">#{useFlag},</if>
-        <if test="createBy != null and createBy != ''">#{createBy},</if>
-        sysdate()
+            <if test="adId != null and adId != 0">#{adId},</if>
+            <if test="adInfo != null and adInfo != ''">#{adInfo},</if>
+            <if test="adImg != null and adImg != ''">#{adImg},</if>
+            <if test="useFlag != null and useFlag != ''">#{useFlag},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            sysdate()
         )
     </insert>
 
     <delete id="deleteAdvertisementByIds" parameterType="Long">
-        delete from edu_ad where ad_id in
+        delete from edu_advertisement where ad_id in
         <foreach collection="array" item="adId" open="(" separator="," close=")">
             #{adId}
         </foreach>

@@ -99,8 +99,8 @@
       <el-table-column label="图片" align="center" prop="wishImg" width="150">
         <template slot-scope="scope">
           <div style="height: 80px;width: 80px;display: grid;justify-items: center;align-items: center">
-            <img v-if="scope.row.wishImg" :src="scope.row.wishImg" style="max-height: 80px;max-width: 130px;"
-                 alt=""/>
+            <img v-if="scope.row.wishImg" :src="scope.row.wishImg" alt=""
+                 style="max-height: 80px;max-width: 130px;position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);"/>
           </div>
         </template>
       </el-table-column>
@@ -260,6 +260,30 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="创建人">
+              <el-input v-model="form.createBy" readonly/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="创建时间">
+              <el-input v-model="form.createTime" readonly/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="修改人">
+              <el-input v-model="form.updateBy" readonly/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="修改时间">
+              <el-input v-model="form.updateTime" readonly/>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
     </el-dialog>
 
@@ -316,7 +340,11 @@ export default {
         wisherSchoolName: undefined,
         wisherName: undefined,
         claimantName: undefined,
-        claimFlag: '0'
+        claimFlag: '0',
+        createBy: undefined,
+        createTime: undefined,
+        updateBy: undefined,
+        updateTime: undefined
       },
       // 表单校验
       rules: {
@@ -362,7 +390,11 @@ export default {
         wisherSchoolName: undefined,
         wisherName: undefined,
         buyerName: undefined,
-        claimFlag: '0'
+        claimFlag: '0',
+        createBy: undefined,
+        createTime: undefined,
+        updateBy: undefined,
+        updateTime: undefined
       };
       this.resetForm("form");
     },

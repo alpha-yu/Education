@@ -90,8 +90,8 @@
       <el-table-column label="LOGO" align="center" prop="schoolImg" width="100">
         <template slot-scope="scope">
           <div style="height: 80px;width: 80px;display: grid;justify-items: center;align-items: center">
-            <img v-if="scope.row.schoolImg" :src="scope.row.schoolImg" style="max-height: 80px;max-width: 80px;"
-                 alt=""/>
+            <img v-if="scope.row.schoolImg" :src="scope.row.schoolImg" alt=""
+                 style="max-height: 80px;max-width: 80px;position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);"/>
           </div>
         </template>
       </el-table-column>
@@ -237,6 +237,30 @@
         <el-form-item label="状态">
           <dict-tag :options="dict.type.sys_normal_disable" :value="form.delFlag"/>
         </el-form-item>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="创建人">
+              <el-input v-model="form.createBy" readonly/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="创建时间">
+              <el-input v-model="form.createTime" readonly/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="修改人">
+              <el-input v-model="form.updateBy" readonly/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="修改时间">
+              <el-input v-model="form.updateTime" readonly/>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
     </el-dialog>
 
@@ -288,7 +312,11 @@ export default {
         schoolCif: undefined,
         schoolAddr: undefined,
         schoolPc: undefined,
-        delFlag: '0'
+        delFlag: '0',
+        createBy: undefined,
+        createTime: undefined,
+        updateBy: undefined,
+        updateTime: undefined
       },
       // 表单校验
       rules: {
@@ -344,7 +372,11 @@ export default {
         schoolCif: undefined,
         schoolAddr: undefined,
         schoolPc: undefined,
-        delFlag: '0'
+        delFlag: '0',
+        createBy: undefined,
+        createTime: undefined,
+        updateBy: undefined,
+        updateTime: undefined
       };
       this.resetForm("form");
     },

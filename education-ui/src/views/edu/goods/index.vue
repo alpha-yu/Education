@@ -99,8 +99,8 @@
       <el-table-column label="图片" align="center" prop="goodsImg" width="150">
         <template slot-scope="scope">
           <div style="height: 80px;width: 80px;display: grid;justify-items: center;align-items: center">
-            <img v-if="scope.row.goodsImg" :src="scope.row.goodsImg" style="max-height: 80px;max-width: 130px;"
-                 alt=""/>
+            <img v-if="scope.row.goodsImg" :src="scope.row.goodsImg" alt=""
+                 style="max-height: 80px;max-width: 130px;position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);"/>
           </div>
         </template>
       </el-table-column>
@@ -157,7 +157,7 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-col :span="24">
           <el-form-item label="商品名称" prop="goodsName">
-            <el-input v-model="form.goodsName" placeholder="请输入心愿名称"/>
+            <el-input v-model="form.goodsName" placeholder="请输入商品名称"/>
           </el-form-item>
         </el-col>
         <el-col :span="24">
@@ -176,7 +176,7 @@
         </el-col>
         <el-col :span="24">
           <el-form-item label="商品简介" prop="goodsInfo">
-            <el-input v-model="form.goodsInfo" placeholder="请输入心愿简介" type="textarea" rows="2"/>
+            <el-input v-model="form.goodsInfo" placeholder="请输入商品简介" type="textarea" rows="2"/>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -210,7 +210,7 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="购买人" prop="buyerName">
-            <el-input v-model="form.buyerName" placeholder="请输入认领人" @change="handleBuyerNameInput"/>
+            <el-input v-model="form.buyerName" placeholder="请输入购买人" @change="handleBuyerNameInput"/>
           </el-form-item>
         </el-col>
       </el-form>
@@ -256,6 +256,30 @@
           <el-col :span="12">
             <el-form-item label="购买人">
               <el-input v-model="form.buyerName" readonly/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="创建人">
+              <el-input v-model="form.createBy" readonly/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="创建时间">
+              <el-input v-model="form.createTime" readonly/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="修改人">
+              <el-input v-model="form.updateBy" readonly/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="修改时间">
+              <el-input v-model="form.updateTime" readonly/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -315,7 +339,11 @@ export default {
         schoolName: undefined,
         goodsPrice: undefined,
         buyerName: undefined,
-        soldFlag: '0'
+        soldFlag: '0',
+        createBy: undefined,
+        createTime: undefined,
+        updateBy: undefined,
+        updateTime: undefined
       },
       // 表单校验
       rules: {
@@ -369,7 +397,11 @@ export default {
         schoolName: undefined,
         goodsPrice: undefined,
         buyerName: undefined,
-        soldFlag: '0'
+        soldFlag: '0',
+        createBy: undefined,
+        createTime: undefined,
+        updateBy: undefined,
+        updateTime: undefined
       };
       this.resetForm("form");
     },
@@ -428,7 +460,7 @@ export default {
           if (this.form.file != null) {
             formData.append("file", this.form.file);
             this.form.api = process.env.VUE_APP_BASE_API;
-            this.form.schoolImg = "";
+            this.form.goodsImg = "";
           } else {
             formData.append("file", new Blob());
           }
@@ -497,9 +529,9 @@ export default {
       }
       const reader = new FileReader();
       reader.readAsDataURL(file);
-      this.form.schoolImg = null;
+      this.form.goodsImg = null;
       reader.onload = () => {
-        this.form.schoolImg = reader.result;
+        this.form.goodsImg = reader.result;
       };
       this.$modal.msgWarning("正在处理");
       return isImg;

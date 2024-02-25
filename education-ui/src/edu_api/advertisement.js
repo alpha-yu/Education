@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 import {parseStrEmpty} from "@/utils/ruoyi";
 
-// 查询商品列表
+// 查询广告列表
 export function listAdvertisement(query) {
   return request({
     url: '/edu/advertisement/list',
@@ -10,7 +10,7 @@ export function listAdvertisement(query) {
   })
 }
 
-// 查询商品详细
+// 查询广告详细
 export function getAdvertisement(advertisementId) {
   return request({
     url: '/edu/advertisement/' + parseStrEmpty(advertisementId),
@@ -18,7 +18,7 @@ export function getAdvertisement(advertisementId) {
   })
 }
 
-// 新增商品信息
+// 新增广告信息
 export function addAdvertisement(data) {
   return request({
     url: '/edu/advertisement',
@@ -27,7 +27,7 @@ export function addAdvertisement(data) {
   })
 }
 
-// 修改商品信息
+// 修改广告信息
 export function updateAdvertisement(data) {
   return request({
     url: '/edu/advertisement',
@@ -36,7 +36,7 @@ export function updateAdvertisement(data) {
   })
 }
 
-// 删除商品信息
+// 删除广告信息
 export function delAdvertisement(advertisementId) {
   return request({
     url: '/edu/advertisement/' + advertisementId,

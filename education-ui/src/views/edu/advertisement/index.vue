@@ -1,60 +1,30 @@
 <template>
   <div class="app-container">
-<!--    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">-->
-<!--      <el-form-item label="资源类型" prop="resourceType">-->
-<!--        <el-select v-model="queryParams.resourceType" placeholder="资源类型" clearable style="width: 180px">-->
-<!--          <el-option-->
-<!--            v-for="dict in dict.type.edu_resource_type"-->
-<!--            :key="dict.value"-->
-<!--            :label="dict.label"-->
-<!--            :value="dict.value"-->
-<!--          />-->
-<!--        </el-select>-->
-<!--      </el-form-item>-->
-<!--      <el-form-item label="适用年级" prop="resourceGrade">-->
-<!--        <el-select v-model="queryParams.resourceGrade" placeholder="适用年级" clearable style="width: 180px">-->
-<!--          <el-option-->
-<!--            v-for="dict in dict.type.edu_resource_grade"-->
-<!--            :key="dict.value"-->
-<!--            :label="dict.label"-->
-<!--            :value="dict.value"-->
-<!--          />-->
-<!--        </el-select>-->
-<!--      </el-form-item>-->
-<!--      <el-form-item label="适用科目" prop="resourceObject">-->
-<!--        <el-select v-model="queryParams.resourceObject" placeholder="适用科目" clearable style="width: 180px">-->
-<!--          <el-option-->
-<!--            v-for="dict in dict.type.edu_resource_object"-->
-<!--            :key="dict.value"-->
-<!--            :label="dict.label"-->
-<!--            :value="dict.value"-->
-<!--          />-->
-<!--        </el-select>-->
-<!--      </el-form-item>-->
-<!--      <el-form-item label="资源状态" prop="norFlag">-->
-<!--        <el-select v-model="queryParams.norFlag" placeholder="资源状态" clearable style="width: 180px">-->
-<!--          <el-option-->
-<!--            v-for="dict in dict.type.edu_resource_statu"-->
-<!--            :key="dict.value"-->
-<!--            :label="dict.label"-->
-<!--            :value="dict.value"-->
-<!--          />-->
-<!--        </el-select>-->
-<!--      </el-form-item>-->
-<!--      <el-form-item label="资源名称" prop="resourceName">-->
-<!--        <el-input-->
-<!--          v-model="queryParams.resourceName"-->
-<!--          placeholder="请输入资源名称"-->
-<!--          clearable-->
-<!--          @keyup.enter.native="handleQuery"-->
-<!--          style="width: 180px"-->
-<!--        />-->
-<!--      </el-form-item>-->
-<!--      <el-form-item>-->
-<!--        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>-->
-<!--        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>-->
-<!--      </el-form-item>-->
-<!--    </el-form>-->
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+      <el-form-item label="广告内容" prop="adInfo">
+        <el-input
+          v-model="queryParams.adInfo"
+          placeholder="请输入广告内容"
+          clearable
+          @keyup.enter.native="handleQuery"
+          style="width: 180px"
+        />
+      </el-form-item>
+      <el-form-item label="广告状态" prop="useFlag">
+        <el-select v-model="queryParams.useFlag" placeholder="广告状态" clearable style="width: 180px">
+          <el-option
+            v-for="dict in dict.type.edu_advertisement_statu"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+      </el-form-item>
+    </el-form>
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
@@ -106,32 +76,20 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="advertisementList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="adList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="45" align="center"/>
-      <el-table-column label="广告信息" align="center" prop="advertisementInfo" :show-overflow-tooltip="true" width="150"/>
       <el-table-column label="展示图片" align="center" prop="adImg" width="100">
         <template slot-scope="scope">
           <div style="height: 100px;width: 80px;display: grid;justify-items: center;align-items: center">
-            <img v-if="scope.row.adImg" :src="scope.row.adImg" style="max-height: 100px;max-width: 80px;"
-                 alt=""/>
+            <img v-if="scope.row.adImg" :src="scope.row.adImg" alt=""
+                 style="max-height: 100px;max-width: 80px;position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);"/>
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="使用状态" align="center" prop="useFlag" width="80">
+      <el-table-column label="广告内容" align="center" prop="adInfo" :show-overflow-tooltip="true" width="850"/>
+      <el-table-column label="广告状态" align="center" prop="useFlag" width="80">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.edu_ad_use" :value="scope.row.useFlag"/>
-        </template>
-      </el-table-column>
-      <el-table-column label="创建人" align="center" prop="createBy"  width="160"/>
-      <el-table-column label="创建时间" align="center" prop="createTime" width="160">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="修改人" align="center" prop="updateBy"  width="160"/>
-      <el-table-column label="修改时间" align="center" prop="createTime"  width="160">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.updateTime) }}</span>
+          <dict-tag :options="dict.type.edu_advertisement_statu" :value="scope.row.useFlag"/>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -176,11 +134,6 @@
     <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-col :span="24">
-          <el-form-item label="广告信息" prop="advertisementInfo">
-            <el-input v-model="form.advertisementInfo" placeholder="请输入广告信息" type="textarea" rows="2"/>
-          </el-form-item>
-        </el-col>
-        <el-col :span="24">
           <el-form-item label="展示图片" prop="adImg">
             <el-upload ref="upload" action="#" :http-request="httpRequest" :show-file-list="false"
                        :before-upload="beforeUpload">
@@ -195,10 +148,15 @@
           </el-form-item>
         </el-col>
         <el-col :span="24">
+          <el-form-item label="广告内容" prop="adInfo">
+            <el-input v-model="form.adInfo" placeholder="请输入广告内容" type="textarea" rows="2"/>
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
           <el-form-item label="使用状态" prop="useFlag">
             <el-radio-group v-model="form.useFlag">
               <el-radio
-                v-for="dict in dict.type.edu_ad_use"
+                v-for="dict in dict.type.edu_advertisement_statu"
                 :key="dict.value"
                 :label="dict.value"
               >{{ dict.label }}
@@ -216,16 +174,40 @@
     <!-- 详情对话框 -->
     <el-dialog :title="title" :visible.sync="infoOpen" width="800px" append-to-body>
       <el-form ref="form" :model="form" label-width="80px">
-        <el-form-item label="广告信息">
-          <el-input v-model="form.advertisementInfo" type="textarea" rows="2" readonly/>
-        </el-form-item>
         <el-form-item label="展示图片">
           <el-image v-if="form.adImg" :src="form.adImg" style="width: 150px;object-fit: contain"
                     :preview-src-list="[form.adImg]"/>
         </el-form-item>
-        <el-form-item label="使用状态">
-          <dict-tag :options="dict.type.edu_ad_use" :value="form.useFlag"/>
+        <el-form-item label="广告信息">
+          <el-input v-model="form.adInfo" type="textarea" rows="2" readonly/>
         </el-form-item>
+        <el-form-item label="使用状态">
+          <dict-tag :options="dict.type.edu_advertisement_statu" :value="form.useFlag"/>
+        </el-form-item>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="创建人">
+              <el-input v-model="form.createBy" readonly/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="创建时间">
+              <el-input v-model="form.createTime" readonly/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="修改人">
+              <el-input v-model="form.updateBy" readonly/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="修改时间">
+              <el-input v-model="form.updateTime" readonly/>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
     </el-dialog>
 
@@ -238,7 +220,7 @@ import {listAdvertisement, getAdvertisement, delAdvertisement, uploadAdvertiseme
 
 export default {
   name: "Advertisement",
-  dicts: ['edu_ad_use'],
+  dicts: ['edu_advertisement_statu'],
   data() {
     return {
       // 遮罩层
@@ -253,8 +235,8 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 学校数据
-      advertisementList: [],
+      // 广告数据
+      adList: [],
       // 弹出层标题
       title: "",
       // 是否显示修改弹出层
@@ -265,18 +247,23 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
+        adInfo: undefined,
         useFlag: undefined
       },
       // 表单参数
       form: {
         adId: undefined,
+        adInfo: undefined,
         adImg: undefined,
-        advertisementInfo: undefined,
-        useFlag: '0'
+        useFlag: '0',
+        createBy: undefined,
+        createTime: undefined,
+        updateBy: undefined,
+        updateTime: undefined
       },
       // 表单校验
       rules: {
-        advertisementInfo: [
+        adInfo: [
           {required: true, message: "未填写广告信息", trigger: "blur"}
         ],
       }
@@ -290,7 +277,7 @@ export default {
     getList() {
       this.loading = true;
       listAdvertisement(this.queryParams).then(response => {
-          this.advertisementList = response.rows;
+          this.adList = response.rows;
           this.total = response.total;
           this.loading = false;
         }
@@ -305,9 +292,13 @@ export default {
     reset() {
       this.form = {
         adId: undefined,
+        adInfo: undefined,
         adImg: undefined,
-        advertisementInfo: undefined,
-        useFlag: '0'
+        useFlag: '0',
+        createBy: undefined,
+        createTime: undefined,
+        updateBy: undefined,
+        updateTime: undefined
       };
       this.resetForm("form");
     },
@@ -414,7 +405,6 @@ export default {
         ...this.queryParams
       }, `advertisement_${new Date().getTime()}.xlsx`)
     },
-    //
     // 打开文件选择器
     openFile: function () {
       document.getElementById('photoFind').click()
@@ -470,6 +460,7 @@ export default {
 .el-textarea__inner {
   font-family: 微软雅黑, Arial, Helvetica, sans-serif !important;
 }
+
 .el-input__inner {
   font-family: 微软雅黑, Arial, Helvetica, sans-serif !important;
 }

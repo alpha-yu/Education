@@ -27,7 +27,7 @@
         from edu_resource
     </sql>
 
-    <select id="selectResourceList" parameterType="Resource" resultMap="ResourceResult">ben
+    <select id="selectResourceList" parameterType="Resource" resultMap="ResourceResult">
         <include refid="selectResourceVo"/>
         <where>
             <if test="resourceName != null and resourceName != ''">
@@ -76,30 +76,30 @@
 
     <insert id="insertResource" parameterType="Resource" useGeneratedKeys="true" keyProperty="resourceId">
         insert into edu_resource(
-        <if test="resourceId != null and resourceId != 0">resource_id,</if>
-        <if test="resourceName != null and resourceName != ''">resource_name,</if>
-        <if test="resourceImg != null and resourceImg != ''">resource_img,</if>
-        <if test="resourceInfo != null and resourceInfo != ''">resource_info,</if>
-        <if test="resourceUrl != null and resourceUrl != ''">resource_url,</if>
-        <if test="resourceType != null and resourceType != ''">resource_type,</if>
-        <if test="resourceGrade != null and resourceGrade != ''">resource_grade,</if>
-        <if test="resourceObject != null and resourceObject != ''">resource_object,</if>
-        <if test="resourceVer != null and resourceVer != ''">resource_ver,</if>
-        <if test="norFlag != null and norFlag != ''">norFlag,</if>
-        <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="resourceId != null and resourceId != 0">resource_id,</if>
+            <if test="resourceName != null and resourceName != ''">resource_name,</if>
+            <if test="resourceImg != null and resourceImg != ''">resource_img,</if>
+            <if test="resourceInfo != null and resourceInfo != ''">resource_info,</if>
+            <if test="resourceUrl != null and resourceUrl != ''">resource_url,</if>
+            <if test="resourceType != null and resourceType != ''">resource_type,</if>
+            <if test="resourceGrade != null and resourceGrade != ''">resource_grade,</if>
+            <if test="resourceObject != null and resourceObject != ''">resource_object,</if>
+            <if test="resourceVer != null and resourceVer != ''">resource_ver,</if>
+            <if test="norFlag != null and norFlag != ''">norFlag,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
         create_time
         )values(
-        <if test="resourceId != null and resourceId != 0">#{resourceId},</if>
-        <if test="resourceName != null and resourceName != ''">#{resourceName},</if>
-        <if test="resourceImg != null and resourceImg != ''">#{resourceImg},</if>
-        <if test="resourceInfo != null and resourceInfo != ''">#{resourceInfo},</if>
-        <if test="resourceUrl != null and resourceUrl != ''">#{resourceUrl},</if>
-        <if test="resourceType != null and resourceType != ''">#{resourceType},</if>
-        <if test="resourceGrade != null and resourceGrade != ''">#{resourceGrade},</if>
-        <if test="resourceObject != null and resourceObject != ''">#{resourceObject},</if>
-        <if test="resourceVer != null and resourceVer != ''">#{resourceVer},</if>
-        <if test="norFlag != null and norFlag != ''">#{norFlag},</if>
-        <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="resourceId != null and resourceId != 0">#{resourceId},</if>
+            <if test="resourceName != null and resourceName != ''">#{resourceName},</if>
+            <if test="resourceImg != null and resourceImg != ''">#{resourceImg},</if>
+            <if test="resourceInfo != null and resourceInfo != ''">#{resourceInfo},</if>
+            <if test="resourceUrl != null and resourceUrl != ''">#{resourceUrl},</if>
+            <if test="resourceType != null and resourceType != ''">#{resourceType},</if>
+            <if test="resourceGrade != null and resourceGrade != ''">#{resourceGrade},</if>
+            <if test="resourceObject != null and resourceObject != ''">#{resourceObject},</if>
+            <if test="resourceVer != null and resourceVer != ''">#{resourceVer},</if>
+            <if test="norFlag != null and norFlag != ''">#{norFlag},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
         sysdate()
         )
     </insert>
