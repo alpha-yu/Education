@@ -38,7 +38,7 @@
                 AND school_name = #{schoolName}
             </if>
             <if test="buyerName != null and buyerName != ''">
-                AND buyer_name = #{buyerName}
+                AND buyer_name LIKE CONCAT('%', #{buyerName}, '%')
             </if>
             <if test="soldFlag != null and soldFlag != ''">
                 AND soldFlag = #{soldFlag}

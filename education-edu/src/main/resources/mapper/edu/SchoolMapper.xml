@@ -31,6 +31,9 @@
             <if test="schoolName != null and schoolName != ''">
                 AND school_name like concat('%', #{schoolName}, '%')
             </if>
+            <if test="schoolAddr != null and schoolAddr != ''">
+                AND school_addr like concat('%', #{schoolAddr}, '%')
+            </if>
             <if test="delFlag != null and delFlag != ''">
                 AND delFlag = #{delFlag}
             </if>

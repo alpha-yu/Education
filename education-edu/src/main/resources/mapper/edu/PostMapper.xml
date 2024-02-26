@@ -26,8 +26,8 @@
     <select id="selectPostList" parameterType="Post" resultMap="PostResult">
         <include refid="selectPostVo"/>
         <where>
-            <if test="schoolId != null and schoolId != ''">
-                AND school_Id = #{schoolId}
+            <if test="postInfo != null and postInfo != ''">
+                AND post_info LIKE CONCAT('%', #{postInfo}, '%')
             </if>
             <if test="schoolName != null and schoolName != ''">
                 AND school_name LIKE CONCAT('%', #{schoolName}, '%')

@@ -301,6 +301,7 @@ export default {
         pageNum: 1,
         pageSize: 10,
         schoolName: undefined,
+        schoolAddr: undefined,
         delFlag: undefined
       },
       // 表单参数
