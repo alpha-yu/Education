@@ -94,7 +94,7 @@ public class AdvertisementController extends BaseController {
     /**
      * 处理带有文件的表单
      */
-    @PreAuthorize("@ss.hasPermi('edu:advertisement:edit')")
+    @PreAuthorize("@ss.hasAnyPermi({'edu:advertisement:edit','edu:advertisement:add'})")
     @Log(title = "广告管理", businessType = BusinessType.UPDATE)
     @PostMapping("/upload")
     public AjaxResult upload(@RequestParam("file") MultipartFile file, Advertisement advertisement) throws Exception {

@@ -95,7 +95,7 @@ public class ResourceController extends BaseController {
     /**
      * 处理带有文件的表单
      */
-    @PreAuthorize("@ss.hasPermi('edu:resource:edit')")
+    @PreAuthorize("@ss.hasAnyPermi({'edu:resource:edit','edu:resource:add'})")
     @Log(title = "资源信息", businessType = BusinessType.UPDATE)
     @PostMapping("/upload")
     public AjaxResult upload(@RequestParam("file") MultipartFile file, Resource r) throws Exception {

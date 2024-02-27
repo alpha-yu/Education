@@ -110,7 +110,7 @@ public class WishController extends BaseController{
     /**
      * 处理带有文件的表单
      */
-    @PreAuthorize("@ss.hasPermi('edu:wish:edit')")
+    @PreAuthorize("@ss.hasAnyPermi({'edu:wish:edit','edu:wish:add'})")
     @Log(title = "心愿详情", businessType = BusinessType.UPDATE)
     @PostMapping("/upload")
     public AjaxResult upload(@RequestParam("file") MultipartFile file, Wish wish) throws Exception {

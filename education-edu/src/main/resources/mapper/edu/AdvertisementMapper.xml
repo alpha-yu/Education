@@ -30,6 +30,9 @@
                 AND useFlag = #{useFlag}
             </if>
         </where>
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
+        order by ad_id
     </select>
 
     <select id="selectAdvertisementById" parameterType="Long" resultMap="AdvertisementResult">

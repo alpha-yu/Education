@@ -97,7 +97,7 @@ public class SchoolController extends BaseController {
     /**
      * 处理带有文件的表单
      */
-    @PreAuthorize("@ss.hasPermi('edu:school:edit')")
+    @PreAuthorize("@ss.hasAnyPermi({'edu:school:edit','edu:school:add'})")
     @Log(title = "学校概况", businessType = BusinessType.UPDATE)
     @PostMapping("/upload")
     public AjaxResult upload(@RequestParam("file") MultipartFile file, School s) throws Exception {

@@ -44,6 +44,9 @@
                 AND soldFlag = #{soldFlag}
             </if>
         </where>
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
+        order by goods_id
     </select>
 
     <select id="selectGoodsById" parameterType="Goods" resultMap="GoodsResult">

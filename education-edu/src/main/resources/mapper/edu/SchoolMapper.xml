@@ -38,6 +38,9 @@
                 AND delFlag = #{delFlag}
             </if>
         </where>
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
+        order by school_id
     </select>
 
     <select id="selectSchoolById" parameterType="School" resultMap="SchoolResult">

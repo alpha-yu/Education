@@ -36,6 +36,9 @@
                 AND comFlag = #{comFlag}
             </if>
         </where>
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
+        order by post_id
     </select>
 
     <select id="selectPostById" parameterType="Post" resultMap="PostResult">

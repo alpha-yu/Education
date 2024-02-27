@@ -49,6 +49,9 @@
                 AND norFlag = #{norFlag}
             </if>
         </where>
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
+        order by resource_id
     </select>
 
     <select id="selectResourceById" parameterType="Resource" resultMap="ResourceResult">

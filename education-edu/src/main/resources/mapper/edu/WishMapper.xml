@@ -43,6 +43,9 @@
                 AND claimFlag = #{claimFlag}
             </if>
         </where>
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
+        order by wish_id
     </select>
 
     <select id="selectWishById" parameterType="Wish" resultMap="WishResult">

@@ -104,7 +104,7 @@ public class GoodsController extends BaseController {
     /**
      * 处理带有文件的表单
      */
-    @PreAuthorize("@ss.hasPermi('edu:goods:edit')")
+    @PreAuthorize("@ss.hasAnyPermi({'edu:goods:edit','edu:goods:add'})")
     @Log(title = "商品管理", businessType = BusinessType.UPDATE)
     @PostMapping("/upload")
     public AjaxResult upload(@RequestParam("file") MultipartFile file, Goods goods) throws Exception {
